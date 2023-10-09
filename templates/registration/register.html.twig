@@ -3,105 +3,123 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-<section class="vh-100" style="background-color: #9A616D;">
+<section class="vh-100" style="background-color: #021F39;">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col col-xl-10">
                 <div class="card" style="border-radius: 1rem;">
                     <div class="row g-0">
-                        <div class="col-md-6 col-lg-5 d-none d-md-block">
-                            <img src="{{ asset('img/img1.webp') }}"
-                                 alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+                        <div class="col-md-6 col-lg-5 d-none d-md-block text-center">
+                            <!-- Centered Image -->
+                            <img src="{{ asset('img/img1.webp') }}" alt="login form" class="img-fluid my-3" style="border-radius: 1rem 0 0 1rem;"/>
+                            <!-- Title under the image -->
                         </div>
                         <div class="col-md-6 col-lg-7 d-flex align-items-center">
                             <div class="card-body p-4 p-lg-5 text-black">
+                                
+                        <div class="d-flex flex-column align-items-center mb-3 pb-1">
+                         
+                            <a href="{{ path('app_login') }}"><img src="{{ asset('img/Logo.svg') }}" width="200" alt="sortir.com"></a>
+                            <span class="h2 fw-bold mb-0 mt-3">Formulaire d'inscription</span>
+                        </div>
 
 
-                                <div class="d-flex align-items-center mb-3 pb-1">
+                                {{ form_start(registrationForm) }}
 
-                                    <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
-                                    <a href="{{ path('app_login') }}"><img src="{{ asset('img/Logo.svg') }} "width="200" alt="sortir.com"></a>
-                                    <span class="h2 fw-bold mb-0">Inscription</span>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ form_row(registrationForm.pseudo,{
+                                            attr:{
+                                                class:'form-control '
+                                            },row_attr:{
+                                                class:'form-group'
+                                            }
+                                        }) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form_row(registrationForm.prenom,{
+                                            attr:{
+                                                class:'form-control'
+                                            },row_attr:{
+                                                class:'form-group'
+                                            }
+                                        }) }}
+                                    </div>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ form_row(registrationForm.nom,{
+                                            attr:{
+                                                class:'form-control'
+                                            },row_attr:{
+                                                class:'form-group'
+                                            }
+                                        }) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form_row(registrationForm.telephone,{
+                                            attr:{
+                                                class:'form-control'
+                                            },row_attr:{
+                                                class:'form-group'
+                                            }
+                                        }) }}
+                                    </div>
+                                </div>
 
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ form_row(registrationForm.email,{
+                                            attr:{
+                                                class:'form-control'
+                                            },row_attr:{
+                                                class:'form-group'
+                                            }
+                                        }) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form_row(registrationForm.plainPassword, {
+                                            label: 'Mot de passe',
+                                            attr:{
+                                                class:'form-control'
+                                            },row_attr:{
+                                                class:'form-group'
+                                            }
+                                        }) }}
+                                    </div>
+                                </div>
 
-    {{ form_start(registrationForm) }}
+                                <div class="row">
+                                    <div class="col-md-1 d-flex align-items-center">
+                                        <!-- Checkbox only without label for alignment -->
+                                        {{ form_widget(registrationForm.administrateur) }}
+                                    </div>
+                                    <div class="col-md-5">
+                                        <!-- Label for the checkbox -->
+                                        <label class="form-check-label" for="{{ registrationForm.administrateur.vars.id }}">Administrateur</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form_row(registrationForm.actif,{
+                                            attr:{
+                                                class:'form-check-input'
+                                            },row_attr:{
+                                                class:'form-check'
+                                            }
+                                        }) }}
+                                    </div>
+                                </div>
 
-        {{ form_row(registrationForm.pseudo,{
-            attr:{
-                class:'form-control '
-            },row_attr:{
-                class:'form-group'
-            }
-        }) }}
+                                <div class="form-group mt-3">
+                                    {{ form_widget(registrationForm.site) }}
+                                    <label for="{{ registrationForm.site.vars.id }}">Site de rattachement</label>
+                                </div>
 
+                                <button type="submit" class="btn text-white w-100 mt-4" style="background-color: #021F39">
+                                    Enregistrer
+                                </button>
 
-                                {{ form_row(registrationForm.prenom,{
-        attr:{
-            class:'form-control'
-        },row_attr:{
-            class:'form-group'
-        }
-    }) }}
-
-    {{ form_row(registrationForm.nom,{
-        attr:{
-            class:'form-control'
-        },row_attr:{
-            class:'form-group'
-        }
-    }) }}
-    {{ form_row(registrationForm.telephone,{
-        attr:{
-            class:'form-control'
-        },row_attr:{
-            class:'form-group'
-        }
-    }) }}
-    {{ form_row(registrationForm.email,{
-        attr:{
-            class:'form-control'
-        },row_attr:{
-            class:'form-group'
-        }
-    }) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Mot de passe',
-            attr:{
-                class:'form-control'
-            },row_attr:{
-                class:'form-group'
-            }
-        }) }}
-
-    {{ form_row(registrationForm.administrateur,{
-        attr:{
-            class:'form-check-input'
-        },row_attr:{
-            class:'form-check'
-        }
-    }) }}
-
-    {{ form_row(registrationForm.actif,{
-        attr:{
-            class:'form-check-input'
-        },row_attr:{
-            class:'form-check'
-        }
-    }) }}
-
-    {{ form_row(registrationForm.site,{
-        attr:{
-            class:'form-group'
-        },row_attr:{
-            class:'form-check'
-        }
-    }) }}
-
-
-        <button type="submit" class="btn btn-dark">Enregistrer</button>
-    {{ form_end(registrationForm) }}
+                                {{ form_end(registrationForm) }}
                             </div>
                         </div>
                     </div>
@@ -112,4 +130,6 @@
 </section>
 {% endblock %}
 
-{% block footer %} {{ parent () }} {%  endblock %}
+{% block footer %}
+    {{ parent () }}
+{% endblock %}
