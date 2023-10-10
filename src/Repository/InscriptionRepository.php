@@ -14,6 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Inscription[]    findAll()
  * @method Inscription[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
+
 class InscriptionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
