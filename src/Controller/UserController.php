@@ -14,9 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
-    /**
-     * @Route("/user/edit", name="app_user_edit")
-     */
+
+    #[Route("/user/edit", name:"app_user_edit")]
     public function edit(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user =$this->getUser();
@@ -45,9 +44,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/user/afficher/{id<[0-9]+>}", name="app_user_afficher")
-     */
+    #[Route("/user/afficher/{id<[0-9]+>}", name:"app_user_afficher")]
     public function afficher(User $user): Response
     {
 
