@@ -15,13 +15,21 @@
                         </div>
 
                         <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                            <div class="card-body p-4 p-lg-5 text-black">
+                                
+                        <div class="d-flex flex-column align-items-center mb-3 pb-1">
+                         
+                            <a href="{{ path('app_login') }}"><img src="{{ asset('img/Logo.svg') }}" width="200" alt="sortir.com"></a>
+                            <span class="h2 fw-bold mb-0 mt-3">Formulaire d'inscription</span>
+                        </div>
+
+                        <div class="col-md-6 col-lg-7 d-flex align-items-center">
                             <div class="card-body p-4 p-lg-3 text-black">
                                 
                             <div class="d-flex flex-column align-items-center mb-3 pb-1">
                                 <a href="{{ path('app_login') }}"><img src="{{ asset('img/Logo.svg') }}" width="250" alt="sortir.com"></a>
                                 <span class="h3 fw-bold mt-2">Formulaire d'inscription</span>
                             </div>
-
 
                                 {{ form_start(registrationForm) }}
 
