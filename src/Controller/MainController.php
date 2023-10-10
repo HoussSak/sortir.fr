@@ -11,9 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/home', name: 'app_home')]
+
 class MainController extends AbstractController
 {
+    #[Route('/home', name: 'app_home')]
     public function home(
         SiteRepository $siteRepository,
         SortieRepository $sortieRepository,

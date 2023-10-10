@@ -13,9 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class VilleController extends AbstractController
 {
-    /**
-     * @Route("/ville", name="app_ville")
-     */
+
+    #[Route("/ville", name: "app_ville")]
     public function index(Request $request, EntityManagerInterface $entityManager,VilleRepository $repo): Response
     {
         $villes=$repo->findAll();
@@ -26,7 +25,6 @@ class VilleController extends AbstractController
 
         if ($villeForm->isSubmitted() && $villeForm->isValid())
         {
-
             $entityManager->persist($ville);
             $entityManager->flush();
 
@@ -42,34 +40,19 @@ class VilleController extends AbstractController
 
     }
 
-
-    /**
-     * @Route("/admin/supprimerVille/{id<[0-9]+>}", name="app_supprimer_ville")
-     */
+    #[Route("/admin/supprimerVille/{id<[0-9]+>}", name: "app_supprimer_ville")]
     public function supprimer(VilleRepository $repo,Ville $ville): Response
     {
         $repo->remove($ville);
-
         return $this->redirectToRoute('app_ville');
-
-
 
     }
 
-
-    /**
-     * @Route("/modifierVille/{id<[0-9]+>}", name="app_modifier_ville")
-     */
-
+    #[Route("/modifierVille/{id<[0-9]+>}", name: "app_modifier_ville")]
     public function modifier(EntityManagerInterface $entityManager,Ville $ville): Response
     {
-
-
-
         //return $this->redirectToRoute('app_ville');
-
         return $this->render('ville/modifier.html.twig');
-
     }
 
 }
