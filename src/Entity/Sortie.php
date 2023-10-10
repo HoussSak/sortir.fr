@@ -40,9 +40,6 @@ class Sortie
     #[ORM\JoinColumn(nullable: false)]
     private $auteur;
 
-    #[ORM\ManyToOne(targetEntity: Etat::class, inversedBy: "sorties")]
-    #[ORM\JoinColumn(nullable: false)]
-    private $etat;
 
     #[ORM\ManyToOne(targetEntity: Lieu::class, inversedBy: "sorties")]
     #[ORM\JoinColumn(nullable: false)]
@@ -56,6 +53,9 @@ class Sortie
 
     #[ORM\Column(type: "text", nullable: true)]
     private $motifAnnulation;
+
+    #[ORM\Column(length: 255)]
+    private ?string $etat = null;
 
     public function __construct()
     {
@@ -163,17 +163,6 @@ class Sortie
         return $this;
     }
 
-    public function getEtat(): ?Etat
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(?Etat $etat): self
-    {
-        $this->etat = $etat;
-
-        return $this;
-    }
 
     public function getLieu(): ?Lieu
     {
@@ -231,6 +220,18 @@ class Sortie
     public function setMotifAnnulation(?string $motifAnnulation): self
     {
         $this->motifAnnulation = $motifAnnulation;
+
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(string $etat): static
+    {
+        $this->etat = $etat;
 
         return $this;
     }

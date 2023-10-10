@@ -130,7 +130,7 @@
             <td>{{ sortie.dateDebut | date('d/m/Y H:i')}}</td>
             <td>{{ sortie.dateCloture | date('d/m/Y')}}</td>
             <td>{{ sortie.usersInscrits|length }}/{{ sortie.nbInscriptionsMax }}</td>
-            <td>{{ sortie.etat.libelle }}</td>
+            <td>{{ sortie.etat }}</td>
             <td>
                 {%  set inscrit = false %}
                 {%  for u in sortie.usersInscrits %}
@@ -155,11 +155,11 @@
 
 
                 {% if sortie.auteur== app.user%}
-                    {% if sortie.etat.libelle=='Créée' %}
+                    {% if sortie.etat=='Créée' %}
                         <a href="{{ path('app_sortie_modifier',{id:sortie.id}) }}"><button class="btn btn-success">Modifier</button></a>
                         <a href="{{ path('app_sortie_publication',{id:sortie.id}) }}"><button class="btn btn-dark"> Publier</button></a>
 
-                    {% elseif sortie.etat.libelle=='Ouverte'  %}
+                    {% elseif sortie.etat=='Ouverte'  %}
                         <a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}"><button class="btn btn-success">Afficher</button></a>
                         <a href="{{ path('app_sortie_annuler',{id:sortie.id}) }}"><button class="btn btn-dark"> Annuler</button></a>
                     {% endif%}
@@ -175,7 +175,7 @@
                                     <a href="{{ path('app_sortie_desister',{id:sortie.id}) }}"><button class="btn btn-danger">Se désister</button></a>
                                         {% endif %}
 
-                                {% elseif sortie.etat.libelle=='Ouverte' and sortie.usersInscrits|length <  sortie.nbInscriptionsMax and 'now'| date('d/m/y')  <=  (sortie.dateCloture | date('d/m/Y'))  %}
+                                {% elseif sortie.etat=='Ouverte' and sortie.usersInscrits|length <  sortie.nbInscriptionsMax and 'now'| date('d/m/y')  <=  (sortie.dateCloture | date('d/m/Y'))  %}
                                     <a href="{{ path('app_sortie_inscription',{id:sortie.id}) }}"><button class="btn btn-primary">S'inscrire</button></a>
 
                                 {% endif %}
