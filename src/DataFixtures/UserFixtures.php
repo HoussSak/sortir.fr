@@ -1,43 +1,50 @@
 <?php
 
+// src/DataFixtures/UserFixtures.php
+
 namespace App\DataFixtures;
 
-use App\Entity\Etat;
-use App\Entity\Ville;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Entity\User;
 
 class UserFixtures extends Fixture
 {
+    private $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
+
     public function load(ObjectManager $manager)
     {
-        $userData = [
-            ['libelle' => 'Créée'],
-            ['libelle' => 'Ouverte'],
-            ['libelle' => 'Cloturée'],
-            ['libelle' => 'En cours'],
-            ['libelle' => 'Annulée'],
-            ['libelle' => 'Passée']
-        ];
+        // Création d'un utilisateur admin
+        $admin = new User();
+        $admin->setEmail('admin@admin.com');
+        $admin->setPassword($this->passwordHasher->hashPassword($admin, 'adminadmin')); // Encodage du mot de passe
+        $admin->setRoles(['ROLE_ADMIN']);
+        $admin->setNom('Admin');
+        $admin->setPrenom('Admin');
+        $admin->setAdministrateur(true);
+        $admin->setActif(true);
+        $admin->setPseudo('admin');
+        $admin->setTelephone(0601055467);
+        $manager->persist($admin);
 
-        foreach ($etatsData as $data) {
-            $etat = new Etat();
-            $etat->setLibelle($data['libelle']);
-            $manager->persist($etat);
-        }
-        // Création de villes
-        $villesData = [
-            ['nom' => 'Nantes', 'codePostal' => '44000'],
-            ['nom' => 'Niort', 'codePostal' => '79000'],
-            ['nom' => 'Quimper', 'codePostal' => '29000'],
-        ];
-
-        foreach ($villesData as $data) {
-            $ville = new Ville();
-            $ville->setNom($data['nom']);
-            $ville->setCodePostal($data['codePostal']);
-            $manager->persist($ville);
-        }
+        // Création d'un utilisateur standard
+        $user = new User();
+        $user->setEmail('user@user.com');
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'useruser')); // Encodage du mot de passe
+        $user->setRoles(['ROLE_USER']);
+        $user->setNom('User');
+        $user->setPrenom('User');
+        $user->setAdministrateur(false);
+        $user->setActif(true);
+        $user->setPseudo('user');
+        $user->setTelephone(0601055467);
+        $manager->persist($user);
 
         $manager->flush();
     }

@@ -17,17 +17,6 @@
     </video>
 </div>
 
-
-
-    <div>
-        <h4>Date du jour : {{ 'now'| date('d/m/Y')}}</h4>
-    </div>
-    <div>
-        <div class="row">
-            <h4 class="participant">Participant : {{app.user.prenom |capitalize}} {{ app.user.nom [:1] }}</h4>
-        </div>
-
-    </div>
     <div>
         {{ form_start(filtreForm) }}
         <div class="row justify-content-center flex-equal-height">
@@ -36,19 +25,19 @@
                 <div class="form-outline mb-2">
                     <input type="search" id="form1" class="form-control" placeholder="Rechercher une sortie par mot clé"/>
                 </div>
-                <!-- Choisir un site -->
+                <!-- Choisir un statut -->
                 <div class="mb-2">
                     <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="site">
-                        <option selected>Selectionner le site</option>
+                        <option selected>Selectionner un statut</option>
                         {% for site in sites %}
                             <option value="{{ site.id }}">{{ site.nom }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <!-- Choisir un statut -->
+                <!-- Choisir un site -->
                 <div class="mb-2">
                     <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="site">
-                        <option selected>Selectionner un statut</option>
+                        <option selected>Selectionner le site</option>
                         {% for site in sites %}
                             <option value="{{ site.id }}">{{ site.nom }}</option>
                         {% endfor %}
