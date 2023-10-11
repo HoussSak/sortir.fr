@@ -1,16 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ parent() }} | Home {% endblock %}
+
 {% block body %}
-    {{ parent() }}
-    <div class="container">
-    <div>
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
-    </div>
+	{{ parent() }}
+<div class="container">
+<div>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+<div class="video-container">
+    <video style="width: 100%" loop autoplay muted>
+        <source src="{{ asset('movie/party.mp4#t=7') }}" type="video/mp4">
+    </video>
+</div>
+
+
+
     <div>
         <h4>Date du jour : {{ 'now'| date('d/m/Y')}}</h4>
     </div>
@@ -20,185 +29,175 @@
         </div>
 
     </div>
-
-        <div>
-            {{ form_start(filtreForm) }}
-            <div class="col-2">
-                <select class="form-select form-select-sm " aria-label=".form-select-sm example" name="site">
-                    <option selected>Selectionner le site </option>
-                    {%  for site in sites %}
-                        <option value="{{ site.id }}">{{ site.nom }}</option>
-                    {% endfor %}
-
-                </select>
+    <div>
+        {{ form_start(filtreForm) }}
+        <div class="row justify-content-center flex-equal-height">
+            <div class="col-md-auto mx-4 mt-2">
+                <!-- Barre de recherche -->
+                <div class="form-outline mb-2">
+                    <input type="search" id="form1" class="form-control" placeholder="Rechercher une sortie par mot clé"/>
+                </div>
+                <!-- Choisir un site -->
+                <div class="mb-2">
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="site">
+                        <option selected>Selectionner le site</option>
+                        {% for site in sites %}
+                            <option value="{{ site.id }}">{{ site.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Choisir un statut -->
+                <div class="mb-2">
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="site">
+                        <option selected>Selectionner un statut</option>
+                        {% for site in sites %}
+                            <option value="{{ site.id }}">{{ site.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
 
-            <div>
-
-                <div class="form-outline">
-                <input type="search" id="form1" class="form-control" />
-                <label class="form-label" for="form1">le nom de la sortie contient : </label>
+            <div
+                    class="col-md-auto mx-4 mt-5">
+                <!-- Date de début -->
+                <div class="form-outline mb-2">
+                    <label for="dateDebut" class="text-white">Date de début</label>
+                    <input type="date" class="form-control" id="dateDebut" name="dateDebut"/>
+                </div>
+                <!-- Date de fin -->
+                <div class="form-outline mb-2">
+                    <label for="dateFin" class="text-white">Date de fin</label>
+                    <input type="date" class="form-control" id="dateFin" name="dateFin"/>
+                </div>
             </div>
-                <div class=" col-3">
-
-                    <label for="dateDebut">Entre</label>
-                    <input type="date" class="form-control" id="dateDebut"  name="dateDebut"/>
-
+            <!-- Checkbox -->
+            <div class="col-md-auto mx-4 mt-5">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="{{ app.user.id }}" id="flexCheckDefault" name="organisateur">
+                    <label class="form-check-label text-white" for="flexCheckDefault">Sortie dont je suis l'organisateur/trice</label>
                 </div>
-
-                <div class=" col-3">
-
-                    <label for="dateFin">Et</label>
-                    <input type="date" class="form-control" id="dateFin"  name="dateFin" />
-
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="{{ app.user.id }}" id="flexCheckChecked" name="inscrit">
+                    <label class="form-check-label text-white" for="flexCheckChecked">Sortie auxquelles je suis inscrit/e</label>
                 </div>
-
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="nonInscrit">
+                    <label class="form-check-label text-white" for="flexCheckDefault">Sortie auxquelles je ne suis pas inscrit/e</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" name="passee">
+                    <label class="form-check-label text-white" for="flexCheckChecked">Sortie passées</label>
+                </div>
             </div>
-
-
-            <div>
-
-
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="{{ app.user.id}}" id="flexCheckDefault"  name="organisateur">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Sortie dont je suis l'organisateur/trice
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="{{ app.user.id }}" id="flexCheckChecked"   name="inscrit">
-                    <label class="form-check-label" for="flexCheckChecked">
-                        Sortie auxquelles je suis inscrit/e
-                    </label>
-                </div>
-
-
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"  name="nonInscrit">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Sortie auxquelles je ne suis pas inscrit/e
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"  name="passee">
-                    <label class="form-check-label" for="flexCheckChecked">
-                        Sortie passées
-
-                    </label>
-                </div>
-
-            </div>
-
-
-
-
-
-            <button type="submit" class="btn btn-outline-primary">search</button>
-
-            {{ form_end(filtreForm) }}
         </div>
 
+        <div
+                class="row justify-content-center mt-2">
+            <!-- Boutons -->
+            <div class="col-md-auto mt-5">
+                <button type="submit" class="btn text-white" style="background-color:#214264; border-radius: 20px;">Rechercher</button>
+                <span class="mx-5"></span>
+                <button type="reset" class="btn text-white" style="background-color:#214264; border-radius: 20px;">Réinitialiser</button>
+            </div>
+        </div>
+        {{ form_end(filtreForm) }}
+    </div>
+
+
+    <!-- Tableau des sorties -->
+    <div class="mt-4">
+        <h2 style="color: #94a8c0;">Liste des sorties</h2>
+        <div class="text-right">
+            <a href="{{ path('app_sortie_creer') }}" class="btn btn-primary">Créer une sortie</a>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nom de la sortie</th>
+                <th scope="col">Date de la sortie</th>
+                <th scope="col">Cloture</th>
+                <th scope="col">inscrits/places</th>
+                <th scope="col">Etat</th>
+                <th scope="col">Inscrit</th>
+                <th scope="col">Organisateur</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {%  for sortie in sorties %}
+                <tr>
+                    <th scope="row"></th>
+
+                    <td>{{ sortie.nom }}</td>
+                    <td>{{ sortie.dateDebut | date('d/m/Y H:i')}}</td>
+                    <td>{{ sortie.dateCloture | date('d/m/Y')}}</td>
+                    <td>{{ sortie.usersInscrits|length }}/{{ sortie.nbInscriptionsMax }}</td>
+                    <td>{{ sortie.etat }}</td>
+                    <td>
+                        {%  set inscrit = false %}
+                        {%  for u in sortie.usersInscrits %}
+                            {% if u== app.user%}
+                                {%  set inscrit = true %}
+                            {% endif %}
+                        {% endfor %}
 
 
 
-
-   {#<div class="input-group">
-        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-        <button type="button" class="btn btn-outline-primary">search</button>
-    </div> #}
-
-    
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nom de la sortie</th>
-            <th scope="col">Date de la sortie</th>
-            <th scope="col">Cloture</th>
-            <th scope="col">inscrits/places</th>
-            <th scope="col">Etat</th>
-            <th scope="col">Inscrit</th>
-            <th scope="col">Organisateur</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {%  for sortie in sorties %}
-        <tr>
-            <th scope="row"></th>
-
-            <td>{{ sortie.nom }}</td>
-            <td>{{ sortie.dateDebut | date('d/m/Y H:i')}}</td>
-            <td>{{ sortie.dateCloture | date('d/m/Y')}}</td>
-            <td>{{ sortie.usersInscrits|length }}/{{ sortie.nbInscriptionsMax }}</td>
-            <td>{{ sortie.etat }}</td>
-            <td>
-                {%  set inscrit = false %}
-                {%  for u in sortie.usersInscrits %}
-                    {% if u== app.user%}
-                        {%  set inscrit = true %}
-                    {% endif %}
-                {% endfor %}
+                        {% if inscrit %}
+                            X
+                        {% endif %}
 
 
 
-               {% if inscrit %}
-                   X
-               {% endif %}
+                    </td>
+                    <td><a href="{{ path('app_user_afficher',{id:sortie.auteur.id}) }}">{{ sortie.auteur.nom |capitalize }} {{ sortie.auteur.prenom [:1] }}</a></td>
+
+                    <td>
 
 
 
-            </td>
-            <td><a href="{{ path('app_user_afficher',{id:sortie.auteur.id}) }}">{{ sortie.auteur.nom |capitalize }} {{ sortie.auteur.prenom [:1] }}</a></td>
+                        {% if sortie.auteur== app.user%}
+                            {% if sortie.etat=='Créée' %}
+                                <a href="{{ path('app_sortie_modifier',{id:sortie.id}) }}"><button class="btn btn-success">Modifier</button></a>
+                                <a href="{{ path('app_sortie_publication',{id:sortie.id}) }}"><button class="btn btn-dark"> Publier</button></a>
 
-            <td>
+                            {% elseif sortie.etat=='Ouverte'  %}
+                                <a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}"><button class="btn btn-success">Afficher</button></a>
+                                <a href="{{ path('app_sortie_annuler',{id:sortie.id}) }}"><button class="btn btn-dark"> Annuler</button></a>
+                            {% endif%}
 
-
-
-                {% if sortie.auteur== app.user%}
-                    {% if sortie.etat=='Créée' %}
-                        <a href="{{ path('app_sortie_modifier',{id:sortie.id}) }}"><button class="btn btn-success">Modifier</button></a>
-                        <a href="{{ path('app_sortie_publication',{id:sortie.id}) }}"><button class="btn btn-dark"> Publier</button></a>
-
-                    {% elseif sortie.etat=='Ouverte'  %}
-                        <a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}"><button class="btn btn-success">Afficher</button></a>
-                        <a href="{{ path('app_sortie_annuler',{id:sortie.id}) }}"><button class="btn btn-dark"> Annuler</button></a>
-                    {% endif%}
-
-                {% elseif sortie.auteur != app.user %}
-                    <a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}"><button class="btn btn-primary">Afficher</button></a>
+                        {% elseif sortie.auteur != app.user %}
+                            <a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}"><button class="btn btn-primary">Afficher</button></a>
 
 
-                                {% if inscrit  %}
+                            {% if inscrit  %}
 
-                                    {%  if  'now'| date('d/m/y H:i')  <  sortie.dateDebut | date('d/m/Y H:i') or not 'now'| date('d/m/y')  >  sortie.dateCloture | date('d/m/Y') %}
+                                {%  if  'now'| date('d/m/y H:i')  <  sortie.dateDebut | date('d/m/Y H:i') or not 'now'| date('d/m/y')  >  sortie.dateCloture | date('d/m/Y') %}
 
                                     <a href="{{ path('app_sortie_desister',{id:sortie.id}) }}"><button class="btn btn-danger">Se désister</button></a>
-                                        {% endif %}
-
-                                {% elseif sortie.etat=='Ouverte' and sortie.usersInscrits|length <  sortie.nbInscriptionsMax and 'now'| date('d/m/y')  <=  (sortie.dateCloture | date('d/m/Y'))  %}
-                                    <a href="{{ path('app_sortie_inscription',{id:sortie.id}) }}"><button class="btn btn-primary">S'inscrire</button></a>
-
                                 {% endif %}
 
-                {% endif %}
+                            {% elseif sortie.etat=='Ouverte' and sortie.usersInscrits|length <  sortie.nbInscriptionsMax and 'now'| date('d/m/y')  <=  (sortie.dateCloture | date('d/m/Y'))  %}
+                                <a href="{{ path('app_sortie_inscription',{id:sortie.id}) }}"><button class="btn btn-primary">S'inscrire</button></a>
 
-            </td>
+                            {% endif %}
 
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                        {% endif %}
 
+                    </td>
 
-
-
-    <div class="container">
-        <div class=" mt-5">
-            <a href="{{ path('app_sortie_creer') }}"><button class="btn btn-primary">Créer une sortie</button></a>
-
-        </div>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
+
+
     </div>
+
 {% endblock %}
-{% block footer %} {{ parent () }} {%  endblock %}
+{% block footer %}
+	{{ parent () }}
+{% endblock %}
+
