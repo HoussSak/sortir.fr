@@ -11,6 +11,7 @@ use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
+use App\utils\EtatEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,10 +33,8 @@ class SortieController extends AbstractController
         $site=$user->getSite();
 
         $sorite = new Sortie();
-        $etat = $etatRepository->findOneBy(['libelle'=>'Créée']);
-
         $sorite->setSite($site);
-        $sorite->setEtat($etat);
+        $sorite->setEtat(EtatEnum::CREEE);
         $sorite->setAuteur($user);
 
         $sortieForm = $this->createForm(SortieType::class, $sorite);
@@ -45,19 +44,14 @@ class SortieController extends AbstractController
             if ($sortieForm->isSubmitted() && $sortieForm->isValid() )
             {
                 $env= $request->request->get('creer');
-
                 $publier='publier';
 
                 if($env=== $publier) {
-                    $etat = $etatRepository->findOneBy(['libelle'=>'Ouverte']);
-
-                    $sorite->setEtat($etat);
+                        $sorite->setEtat(EtatEnum::OUVERTE);
                     $entityManager->persist($sorite);
                     $entityManager->flush();
                     $this->addFlash('success', 'Votre Sortie à été créee et publiée avec succes!');
-
                     return $this->redirectToRoute('app_home');
-
                 }
 
             $entityManager->persist($sorite);
@@ -65,7 +59,6 @@ class SortieController extends AbstractController
 
             // do anything else you need here, like send an email
             $this->addFlash('success', 'Votre Sortie à été crée avec succes!');
-
             return $this->redirectToRoute('app_home');
         }
 
@@ -87,7 +80,6 @@ class SortieController extends AbstractController
     #[Route("/sortie/afficher/{id<[0-9]+>}", name: "app_sortie_afficher")]
     public function afficher(Sortie $sortie): Response
     {
-
         return $this->render('sortie/afficher.html.twig',compact('sortie'));
     }
 
@@ -118,13 +110,11 @@ class SortieController extends AbstractController
             $supprimer='supprimer';
 
             if($env=== $publier) {
-                $etat = $etatRepository->findOneBy(['libelle'=>'Ouverte']);
-                $sorite->setEtat($etat);
+                $sorite->setEtat(EtatEnum::OUVERTE);
                 $entityManager->persist($sorite);
                 $entityManager->flush();
                 $this->addFlash('success', 'Votre Sortie à été publiée avec succes!');
                 return $this->redirectToRoute('app_home');
-
             }
             elseif ($env=== $supprimer) {
                 $entityManager->remove($sorite);
@@ -152,12 +142,11 @@ class SortieController extends AbstractController
                                  EtatRepository $etatRepository): Response
     {
         $user=$this->getUser();
-        $etat = $etatRepository->findOneBy(['libelle'=>'Cloturée']);
         $sortie =$sortieRepository->find($id);
         $sortie->addUsersInscrit($user);
 
         if ($sortie->getNbInscriptionsMax() === $sortie->getUsersInscrits()->count()) {
-            $sortie->setEtat($etat);
+            $sortie->setEtat(EtatEnum::CLOTUREE);
         }
         $entityManager->persist($sortie);
         $entityManager->flush();
@@ -174,8 +163,7 @@ class SortieController extends AbstractController
     {
 
         $sorite =$sortieRepository->find($id);
-        $etat = $etatRepository->findOneBy(['libelle'=>'Ouvert']);
-        $sorite->setEtat($etat);
+        $sorite->setEtat(EtatEnum::OUVERTE);
         $entityManager->flush();
         $this->addFlash('success', 'Votre sortie à été publiée avec succés!');
         return $this->redirectToRoute('app_home');
@@ -185,12 +173,11 @@ class SortieController extends AbstractController
     public function desister (SortieRepository $sortieRepository,$id,EntityManagerInterface $entityManager,EtatRepository $etatRepository): Response
     {
         $user=$this->getUser();
-        $etat = $etatRepository->findOneBy(['libelle'=>'Ouvert']);
         $sortie =$sortieRepository->find($id);
         $sortie->removeUsersInscrit($user);
 
         if ($sortie->getNbInscriptionsMax() > $sortie->getUsersInscrits()->count()) {
-            $sortie->setEtat($etat);
+            $sortie->setEtat(EtatEnum::OUVERTE);
         }
         $entityManager->persist($sortie);
         $entityManager->flush();
@@ -206,7 +193,6 @@ class SortieController extends AbstractController
     $id): Response
     {
         $sorite =$sortieRepository->find($id);
-        $etat = $etatRepository->findOneBy(['libelle'=>'Annulée']);
 
         $annulerSortieForm = $this->createForm(AnnulationType::class, $sorite);
         $annulerSortieForm->handleRequest($request);
@@ -222,13 +208,12 @@ class SortieController extends AbstractController
                 // do anything else you need here, like send an email
             }
 
-            $sorite->setEtat($etat);
+            $sorite->setEtat(EtatEnum::ANNULEE);
             $entityManager->persist($sorite);
             $entityManager->flush();
 
             // do anything else you need here, like send an email
             $this->addFlash('success', 'Votre Sortie à été annulée avec succes!');
-
             return $this->redirectToRoute('app_home');
         }
 
