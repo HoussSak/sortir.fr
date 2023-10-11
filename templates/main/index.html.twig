@@ -4,7 +4,6 @@
 
 {% block body %}
 	{{ parent() }}
-<div class="container">
 <div>
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">
@@ -191,9 +190,6 @@
             {% endfor %}
             </tbody>
         </table>
-    </div>
-
-
     </div>
 
 {% endblock %}
