@@ -3,44 +3,43 @@
 {% block title %}Hello VilleController!{% endblock %}
 
 {% block body %}
-{{ parent() }}
-    <h3>Gérer les villes</h3>
+    {{ parent() }}
+    <div class="container my-5">
+        <div class="bg-white p-4 rounded shadow-sm">
+            <h3 class="mb-4 border-bottom">Gérer les villes</h3>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Ville</th>
-            <th scope="col">Code postal</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% if villes %}
-        {% for ville in villes %}
-        <tr>
-            <th scope="row">{{ ville.id }}</th>
-
-            <td>{{ ville.nom }}</td>
-            <td>{{ ville.codePostal}}</td>
-            <td><a href="{{ path('app_supprimer_ville',{id:ville.id}) }}"><button class="btn btn-danger">Supprimer</button></a></td>
-            <td><a href="#"><button class="btn btn-primary">Modifier</button></a></td>c
-        </tr>
-        {%  endfor %}
-        {% endif %}
-        <tr>
-            <th scope="row"></th>
-
-            {{ form_start(villeForm) }}
-            <td>{{ form_row(villeForm.nom) }}</td>
-            <td>{{ form_row(villeForm.codePostal) }}</td>
-            <td><button class="btn btn-secondary">Ajouter</button></td>
-        </tr>
-            {{ form_end(villeForm) }}
-
-
-        </tbody>
-    </table>
-
-
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Ville</th>
+                        <th scope="col">Code postal</th>
+                        <th scope="col" colspan="2" class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if villes %}
+                        {% for ville in villes %}
+                            <tr>
+                                <th scope="row">{{ ville.id }}</th>
+                                <td>{{ ville.nom }}</td>
+                                <td>{{ ville.codePostal }}</td>
+                                <td class="text-center"><a href="{{ path('app_supprimer_ville', {id: ville.id}) }}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer</a></td>
+                                <td class="text-center"><a href="#" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> Modifier</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    {{ form_start(villeForm, {'attr': {'class': 'my-3'}}) }}
+                        <tr>
+                            <th scope="row"></th>
+                            <td>{{ form_row(villeForm.nom) }}</td>
+                            <td>{{ form_row(villeForm.codePostal) }}</td>
+                            <td colspan="2" class="text-center"><button class="btn btn-secondary btn-sm"><i class="bi bi-plus"></i> Ajouter</button></td>
+                        </tr>
+                    {{ form_end(villeForm) }}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
