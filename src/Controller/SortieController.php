@@ -22,15 +22,13 @@ class SortieController extends AbstractController
 {
 
     #[Route("/creer/sortie", name: "app_sortie_creer")]
-    public function creerSortie(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        SortieRepository $sortieRepository,
-        EtatRepository $etatRepository,
-        LieuRepository $lieuRepository
-    ): Response {
-        $user = $this->getUser();
-        $site = $user->getSite();
+    public function creerSortie(Request $request,
+                                EntityManagerInterface $entityManager,
+                                SortieRepository $sortieRepository,
+    LieuRepository $lieuRepository): Response
+    {
+        $user=$this->getUser();
+        $site=$user->getSite();
 
         $sortie = new Sortie();
         $sortie->setSite($site);
@@ -40,31 +38,18 @@ class SortieController extends AbstractController
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         $sortieForm->handleRequest($request);
 
-        $dateDebut = $sortie->getDateDebut();
-        $dateCloture = $sortie->getDateCloture();
+            if ($sortieForm->isSubmitted() && $sortieForm->isValid() )
+            {
+                $env= $request->request->get('creer');
+                $publier='publier';
 
-        
-        //
-        //  if ($sortieForm->isSubmitted() )
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-            $dateDebut = $sortie->getDateDebut();
-            $dateCloture = $sortie->getDateCloture();
-    
-            if ($dateCloture >= $dateDebut) {
-                $this->addFlash('error', 'La date de clôture doit être strictement inférieure à la date de début.');
-                return $this->redirectToRoute('app_sortie_creer');
-            }
-
-            $env = $request->request->get('creer');
-            $publier = 'publier';
-
-            if ($env === $publier) {
-                $sortie->setEtat(EtatEnum::OUVERTE);
-                $entityManager->persist($sortie);
-                $entityManager->flush();
-                $this->addFlash('success', 'Votre Sortie a été créée et publiée avec succès!');
-                return $this->redirectToRoute('app_home');
-            }
+                if($env=== $publier) {
+                    $sortie->setEtat(EtatEnum::OUVERTE);
+                    $entityManager->persist($sortie);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Votre Sortie à été créee et publiée avec succes!');
+                    return $this->redirectToRoute('app_home');
+                }
 
             $entityManager->persist($sortie);
             $entityManager->flush();
@@ -82,7 +67,7 @@ class SortieController extends AbstractController
     
 
     #[Route("/lieux-villes", name: "api_lieux_villes")]
-    public function fruitsCouleurs(LieuRepository $lieuRepository, VilleRepository $villeRepository, EtatRepository $etatRepository): Response
+    public function fruitsCouleurs(LieuRepository $lieuRepository,VilleRepository $villeRepository): Response
     {
         $tab['lieux'] = $lieuRepository->findAll();
         $tab['villes'] = $villeRepository->findAll();
@@ -102,18 +87,15 @@ class SortieController extends AbstractController
 
 
     #[Route("/modifier/sortie/{id<[0-9]+>}", name: "app_sortie_modifier")]
-    public function modifierSortie(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        SortieRepository $sortieRepository,
-        EtatRepository $etatRepository,
-        $id
-    ): Response {
-        $user = $this->getUser();
-        $site = $user->getSite();
-    
-        $sortie = $sortieRepository->find($id);
-    
+    public function modifierSortie(Request $request,EntityManagerInterface $entityManager,
+                                   SortieRepository $sortieRepository,
+                                   $id): Response
+    {
+        $user=$this->getUser();
+        $site=$user->getSite();
+
+        $sortie =$sortieRepository->find($id);
+
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         $sortieForm->handleRequest($request);
     
@@ -159,14 +141,11 @@ class SortieController extends AbstractController
     
 
     #[Route("/sortie/inscription/{id<[0-9]+>}", name: "app_sortie_inscription")]
-    public function inscription(
-        SortieRepository $sortieRepository,
-        $id,
-        EntityManagerInterface $entityManager,
-        EtatRepository $etatRepository
-    ): Response {
-        $user = $this->getUser();
-        $sortie = $sortieRepository->find($id);
+    public function inscription (SortieRepository $sortieRepository,$id,
+                                 EntityManagerInterface $entityManager): Response
+    {
+        $user=$this->getUser();
+        $sortie =$sortieRepository->find($id);
         $sortie->addUsersInscrit($user);
 
         if ($sortie->getNbInscriptionsMax() === $sortie->getUsersInscrits()->count()) {
@@ -180,12 +159,10 @@ class SortieController extends AbstractController
 
 
     #[Route("/sortie/publication/{id<[0-9]+>}", name: "app_sortie_publication")]
-    public function publication(
-        SortieRepository $sortieRepository,
-        $id,
-        EntityManagerInterface $entityManager,
-        EtatRepository $etatRepository
-    ): Response {
+    public function publication (SortieRepository $sortieRepository,
+                                 $id,
+                                 EntityManagerInterface $entityManager): Response
+    {
 
         $sortie = $sortieRepository->find($id);
         $sortie->setEtat(EtatEnum::OUVERTE);
@@ -195,7 +172,7 @@ class SortieController extends AbstractController
     }
 
     #[Route("/sortie/desister/{id<[0-9]+>}", name: "app_sortie_desister")]
-    public function desister(SortieRepository $sortieRepository, $id, EntityManagerInterface $entityManager, EtatRepository $etatRepository): Response
+    public function desister (SortieRepository $sortieRepository,$id,EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
         $sortie = $sortieRepository->find($id);
@@ -211,14 +188,12 @@ class SortieController extends AbstractController
     }
 
     #[Route("/annuler/sortie/{id<[0-9]+>}", name: "app_sortie_annuler")]
-    public function annulerSortie(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        SortieRepository $sortieRepository,
-        EtatRepository $etatRepository,
-        $id
-    ): Response {
-        $sortie = $sortieRepository->find($id);
+    public function annulerSortie(Request $request,
+                                  EntityManagerInterface $entityManager,
+                                  SortieRepository $sortieRepository,
+    $id): Response
+    {
+        $sortie =$sortieRepository->find($id);
 
         $annulerSortieForm = $this->createForm(AnnulationType::class, $sortie);
         $annulerSortieForm->handleRequest($request);
