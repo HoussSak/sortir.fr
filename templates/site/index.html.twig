@@ -4,41 +4,40 @@
 
 {% block body %}
     {{ parent() }}
-    <h3>Gérer les sites</h3>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Site</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% if sites %}
-            {% for site in sites %}
+    <div class="container my-5">
+        <div class="bg-white p-4 rounded shadow-sm">
+            <h3 class="mb-4 border-bottom">Gérer les sites</h3>
+            <table class="table table-hover">
+                <thead class="thead-dark">
                 <tr>
-                    <th scope="row">{{ site.id }}</th>
-
-                    <td>{{ site.nom }}</td>
-                    <td><a href="{{ path('app_supprimer_site',{id:site.id}) }}"><button class="btn btn-danger">Supprimer</button></a></td>
-                    <td><a href="#"><button class="btn btn-primary">Modifier</button></a></td>
+                    <th scope="col">#</th>
+                    <th scope="col">Site</th>
+                    <th scope="col" colspan="2" class="text-center">Actions</th>
                 </tr>
-            {%  endfor %}
-        {% endif %}
-        <tr>
-            <th scope="row"></th>
-
-            {{ form_start(siteForm) }}
-            <td>{{ form_row(siteForm.nom) }}</td>
-            <td><button class="btn btn-secondary">Ajouter</button></td>
-        </tr>
-        {{ form_end(siteForm) }}
-
-
-        </tbody>
-    </table>
-    {# sodo cest haram #}
-
+                </thead>
+                <tbody>
+                {% if sites %}
+                    {% for site in sites %}
+                        <tr>
+                            <th scope="row">{{ site.id }}</th>
+                            <td>{{ site.nom }}</td>
+                            <td class="text-center"><a href="{{ path('app_supprimer_site',{id:site.id}) }}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer</a></td>
+                            <td class="text-center"><a href="#" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> Modifier</a></td>
+                        </tr>
+                    {%  endfor %}
+                {% endif %}
+                <tr>
+                    <th scope="row"></th>
+                    {{ form_start(siteForm, {'attr': {'class': 'my-3'}}) }}
+                        <td>{{ form_row(siteForm.nom) }}</td>
+                        <td colspan="2" class="text-center"><button class="btn btn-secondary btn-sm"><i class="bi bi-plus"></i> Ajouter</button></td>
+                    {{ form_end(siteForm) }}
+                </tr>
+                </tbody>
+            </table>
+            {# sodo c'est haram #}
+        </div>
+    </div>
 {% endblock %}
-{% block footer %} {{ parent () }} {%  endblock %}
 
+{% block footer %} {{ parent () }} {% endblock %}

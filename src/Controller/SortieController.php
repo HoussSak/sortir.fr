@@ -59,26 +59,32 @@ class SortieController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        return $this->render('sortie/creer.html.twig',[
-            'sortieForm'=>$sortieForm->createView()
+        return $this->render('sortie/creer.html.twig', [
+            'sortieForm' => $sortieForm->createView()
         ]);
     }
+
+    
 
     #[Route("/lieux-villes", name: "api_lieux_villes")]
     public function fruitsCouleurs(LieuRepository $lieuRepository,VilleRepository $villeRepository): Response
     {
-        $tab['lieux']= $lieuRepository->findAll();
-        $tab['villes']= $villeRepository->findAll();
+        $tab['lieux'] = $lieuRepository->findAll();
+        $tab['villes'] = $villeRepository->findAll();
 
         // reponse en json
-        return $this->json($tab,200,[],['groups'=>'lieu']);
+        return $this->json($tab, 200, [], ['groups' => 'lieu']);
     }
+
+
 
     #[Route("/sortie/afficher/{id<[0-9]+>}", name: "app_sortie_afficher")]
     public function afficher(Sortie $sortie): Response
     {
-        return $this->render('sortie/afficher.html.twig',compact('sortie'));
+        return $this->render('sortie/afficher.html.twig', compact('sortie'));
     }
+
+
 
     #[Route("/modifier/sortie/{id<[0-9]+>}", name: "app_sortie_modifier")]
     public function modifierSortie(Request $request,EntityManagerInterface $entityManager,
@@ -88,44 +94,51 @@ class SortieController extends AbstractController
         $user=$this->getUser();
         $site=$user->getSite();
 
-        $sorite =$sortieRepository->find($id);
+        $sortie =$sortieRepository->find($id);
 
-        $sortieForm = $this->createForm(SortieType::class, $sorite);
+        $sortieForm = $this->createForm(SortieType::class, $sortie);
         $sortieForm->handleRequest($request);
-
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid())
-        {
-            $env= $request->request->get('modifier');
-
-            $publier='publier';
-            $supprimer='supprimer';
-
-            if($env=== $publier) {
-                $sorite->setEtat(EtatEnum::OUVERTE);
-                $entityManager->persist($sorite);
+    
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+            $dateDebut = $sortie->getDateDebut();
+            $dateCloture = $sortie->getDateCloture();
+    
+            if ($dateCloture >= $dateDebut) {
+                $this->addFlash('error', 'La date de clôture doit être strictement inférieure à la date de début.');
+                return $this->redirectToRoute('app_sortie_modifier', ['id' => $id]);
+            }
+    
+            $env = $request->request->get('modifier');
+    
+            $publier = 'publier';
+            $supprimer = 'supprimer';
+    
+            if ($env === $publier) {
+                $sortie->setEtat(EtatEnum::OUVERTE);
+                $entityManager->persist($sortie);
                 $entityManager->flush();
                 $this->addFlash('success', 'Votre Sortie à été publiée avec succes!');
                 return $this->redirectToRoute('app_home');
-            }
-            elseif ($env=== $supprimer) {
-                $entityManager->remove($sorite);
+            } elseif ($env === $supprimer) {
+                $entityManager->remove($sortie);
                 $entityManager->flush();
                 $this->addFlash('success', 'Votre Sortie à été supprimée avec succes!');
                 return $this->redirectToRoute('app_home');
             }
-
-            $entityManager->persist($sorite);
+    
+            $entityManager->persist($sortie);
             $entityManager->flush();
-
+    
             $this->addFlash('success', 'Votre Sortie à été modifié avec succes!');
             return $this->redirectToRoute('app_home');
         }
-
-        return $this->render('sortie/modifier.html.twig',[
-            'sortieForm'=>$sortieForm->createView(),
-            'sorite'=>$sorite
+    
+        return $this->render('sortie/modifier.html.twig', [
+            'sortieForm' => $sortieForm->createView(),
+            'sortie' => $sortie
         ]);
     }
+    
 
     #[Route("/sortie/inscription/{id<[0-9]+>}", name: "app_sortie_inscription")]
     public function inscription (SortieRepository $sortieRepository,$id,
@@ -151,18 +164,18 @@ class SortieController extends AbstractController
                                  EntityManagerInterface $entityManager): Response
     {
 
-        $sorite =$sortieRepository->find($id);
-        $sorite->setEtat(EtatEnum::OUVERTE);
+        $sortie = $sortieRepository->find($id);
+        $sortie->setEtat(EtatEnum::OUVERTE);
         $entityManager->flush();
-        $this->addFlash('success', 'Votre sortie à été publiée avec succés!');
+        $this->addFlash('success', 'Votre sortie à été publiée avec succès!');
         return $this->redirectToRoute('app_home');
     }
 
     #[Route("/sortie/desister/{id<[0-9]+>}", name: "app_sortie_desister")]
     public function desister (SortieRepository $sortieRepository,$id,EntityManagerInterface $entityManager): Response
     {
-        $user=$this->getUser();
-        $sortie =$sortieRepository->find($id);
+        $user = $this->getUser();
+        $sortie = $sortieRepository->find($id);
         $sortie->removeUsersInscrit($user);
 
         if ($sortie->getNbInscriptionsMax() > $sortie->getUsersInscrits()->count()) {
@@ -170,7 +183,7 @@ class SortieController extends AbstractController
         }
         $entityManager->persist($sortie);
         $entityManager->flush();
-        $this->addFlash('success', 'Vous vous etes désisté avec succés!');
+        $this->addFlash('success', 'Vous vous êtes désisté avec succès!');
         return $this->redirectToRoute('app_home');
     }
 
@@ -180,37 +193,32 @@ class SortieController extends AbstractController
                                   SortieRepository $sortieRepository,
     $id): Response
     {
-        $sorite =$sortieRepository->find($id);
+        $sortie =$sortieRepository->find($id);
 
-        $annulerSortieForm = $this->createForm(AnnulationType::class, $sorite);
+        $annulerSortieForm = $this->createForm(AnnulationType::class, $sortie);
         $annulerSortieForm->handleRequest($request);
 
-        if ($annulerSortieForm->isSubmitted() && $annulerSortieForm->isValid())
-        {
-            $env=$request->request->get('annuler');
-            $annuler='annuler';
-            $enregistrer='enregistrer';
+        if ($annulerSortieForm->isSubmitted() && $annulerSortieForm->isValid()) {
+            $env = $request->request->get('annuler');
+            $annuler = 'annuler';
+            $enregistrer = 'enregistrer';
 
-            if ($env== $annuler) {
+            if ($env == $annuler) {
                 return $this->redirectToRoute('app_home');
                 // do anything else you need here, like send an email
             }
 
-            $sorite->setEtat(EtatEnum::ANNULEE);
-            $entityManager->persist($sorite);
+            $sortie->setEtat(EtatEnum::ANNULEE);
+            $entityManager->persist($sortie);
             $entityManager->flush();
 
             // do anything else you need here, like send an email
-            $this->addFlash('success', 'Votre Sortie à été annulée avec succes!');
+            $this->addFlash('success', 'Votre Sortie a été annulée avec succès!');
             return $this->redirectToRoute('app_home');
         }
 
-        return $this->render('sortie/annulerSortie.html.twig',[
-            'annulerSortieForm'=>$annulerSortieForm->createView(),'sortie'=>$sorite
+        return $this->render('sortie/annulerSortie.html.twig', [
+            'annulerSortieForm' => $annulerSortieForm->createView(), 'sortie' => $sortie
         ]);
     }
-
-
-
 }
-

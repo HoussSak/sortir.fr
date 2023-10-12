@@ -30,6 +30,9 @@ class MainController extends AbstractController
         $filtreForm->handleRequest($request);
 
         $choixSite = $request->request->get('site');
+        $request->getSession()->set('selected_site_id', $choixSite);
+
+
         $choixInscrit = $request->request->get('organisateur');
         $inscrit = $request->request->get('inscrit');
 
