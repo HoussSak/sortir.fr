@@ -1,1 +1,53 @@
 {% extends 'base.html.twig' %}
+
+{% block title %}Gestion des utilisateurs{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container my-5">
+        <div class="bg-white p-4 rounded shadow-sm">
+            <h3 class="mb-4 border-bottom">Gérer les utilisateurs</h3>
+
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pseudo</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prenom</th>
+                    <th scope="col">Site de rattachement</th>
+                    <th scope="col">Téléphone</th>
+                    <th scope="col">Mail</th>
+                    <th scope="col" colspan="3" class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if users %}
+                    {% for user in users %}
+                        {% if 'ROLE_USER' in user.roles %}
+                        <tr>
+                            <th scope="row">{{ user.id }}</th>
+                            <td>{{ user.pseudo }}</td>
+                            <td>{{ user.nom }}</td>
+                            <td>{{ user.prenom }}</td>
+                            <td>{{ user.site.nom }}</td>
+                            <td>{{ user.telephone }}</td>
+                            <td>{{ user.email }}</td>
+                        {% if user.actif %}
+                            <td class="text-center"><a href="{{ path('app_dashboard_changestatus', {id: user.id}) }}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Désactiver</a></td>
+                        {% else %}
+                            <td class="text-center"><a href="{{ path('app_dashboard_changestatus', {id: user.id}) }}" class="btn btn-success btn-sm"><i class="bi bi-trash"></i> Activer</a></td>
+                        {% endif %}
+                            <td class="text-center"><a href="{{ path('app_dashboard_delete', {id: user.id}) }}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer</a></td>
+                            <td class="text-center"><a href="{{ path('app_user_edit', {id: user.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> Modifier</a></td>
+                        </tr>
+                        {% endif %}
+
+                    {% endfor %}
+                {% endif %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
