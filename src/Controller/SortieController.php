@@ -25,35 +25,33 @@ class SortieController extends AbstractController
     public function creerSortie(Request $request,
                                 EntityManagerInterface $entityManager,
                                 SortieRepository $sortieRepository,
-                                EtatRepository $etatRepository,
     LieuRepository $lieuRepository): Response
     {
         $user=$this->getUser();
         $site=$user->getSite();
 
-        $sorite = new Sortie();
-        $sorite->setSite($site);
-        $sorite->setEtat(EtatEnum::CREEE);
-        $sorite->setAuteur($user);
+        $sortie = new Sortie();
+        $sortie->setSite($site);
+        $sortie->setEtat(EtatEnum::CREEE);
+        $sortie->setAuteur($user);
 
-        $sortieForm = $this->createForm(SortieType::class, $sorite);
+        $sortieForm = $this->createForm(SortieType::class, $sortie);
         $sortieForm->handleRequest($request);
-      //
-      //  if ($sortieForm->isSubmitted() )
+
             if ($sortieForm->isSubmitted() && $sortieForm->isValid() )
             {
                 $env= $request->request->get('creer');
                 $publier='publier';
 
                 if($env=== $publier) {
-                        $sorite->setEtat(EtatEnum::OUVERTE);
-                    $entityManager->persist($sorite);
+                    $sortie->setEtat(EtatEnum::OUVERTE);
+                    $entityManager->persist($sortie);
                     $entityManager->flush();
                     $this->addFlash('success', 'Votre Sortie à été créee et publiée avec succes!');
                     return $this->redirectToRoute('app_home');
                 }
 
-            $entityManager->persist($sorite);
+            $entityManager->persist($sortie);
             $entityManager->flush();
 
             // do anything else you need here, like send an email
@@ -67,7 +65,7 @@ class SortieController extends AbstractController
     }
 
     #[Route("/lieux-villes", name: "api_lieux_villes")]
-    public function fruitsCouleurs(LieuRepository $lieuRepository,VilleRepository $villeRepository,EtatRepository $etatRepository): Response
+    public function fruitsCouleurs(LieuRepository $lieuRepository,VilleRepository $villeRepository): Response
     {
         $tab['lieux']= $lieuRepository->findAll();
         $tab['villes']= $villeRepository->findAll();
@@ -85,18 +83,12 @@ class SortieController extends AbstractController
     #[Route("/modifier/sortie/{id<[0-9]+>}", name: "app_sortie_modifier")]
     public function modifierSortie(Request $request,EntityManagerInterface $entityManager,
                                    SortieRepository $sortieRepository,
-                                   EtatRepository $etatRepository,
                                    $id): Response
     {
         $user=$this->getUser();
         $site=$user->getSite();
 
         $sorite =$sortieRepository->find($id);
-
-        //$etat = $etatRepository->findOneBy(['libelle'=>'Créée']);
-      // $sorite->setSite($site);
-      // $sorite->setEtat($etat);
-      // $sorite->setAuteur($user);
 
         $sortieForm = $this->createForm(SortieType::class, $sorite);
         $sortieForm->handleRequest($request);
@@ -137,8 +129,7 @@ class SortieController extends AbstractController
 
     #[Route("/sortie/inscription/{id<[0-9]+>}", name: "app_sortie_inscription")]
     public function inscription (SortieRepository $sortieRepository,$id,
-                                 EntityManagerInterface $entityManager,
-                                 EtatRepository $etatRepository): Response
+                                 EntityManagerInterface $entityManager): Response
     {
         $user=$this->getUser();
         $sortie =$sortieRepository->find($id);
@@ -157,8 +148,7 @@ class SortieController extends AbstractController
     #[Route("/sortie/publication/{id<[0-9]+>}", name: "app_sortie_publication")]
     public function publication (SortieRepository $sortieRepository,
                                  $id,
-                                 EntityManagerInterface $entityManager,
-                                 EtatRepository $etatRepository): Response
+                                 EntityManagerInterface $entityManager): Response
     {
 
         $sorite =$sortieRepository->find($id);
@@ -169,7 +159,7 @@ class SortieController extends AbstractController
     }
 
     #[Route("/sortie/desister/{id<[0-9]+>}", name: "app_sortie_desister")]
-    public function desister (SortieRepository $sortieRepository,$id,EntityManagerInterface $entityManager,EtatRepository $etatRepository): Response
+    public function desister (SortieRepository $sortieRepository,$id,EntityManagerInterface $entityManager): Response
     {
         $user=$this->getUser();
         $sortie =$sortieRepository->find($id);
@@ -188,7 +178,6 @@ class SortieController extends AbstractController
     public function annulerSortie(Request $request,
                                   EntityManagerInterface $entityManager,
                                   SortieRepository $sortieRepository,
-                                  EtatRepository $etatRepository,
     $id): Response
     {
         $sorite =$sortieRepository->find($id);
