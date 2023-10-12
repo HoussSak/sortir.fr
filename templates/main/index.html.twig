@@ -19,7 +19,6 @@
 			<source src="{{ asset('movie/party.mp4#t=7') }}" type="video/mp4">
 		</video>
 	</div>
-	
 
 	<div>
 		{{ form_start(filtreForm) }}
@@ -101,13 +100,12 @@
 
 	<!-- Tableau des sorties -->
 	<div class="mt-4 container">
-
 		<h2 style="mb-3; color: #7B8997;">Liste des sorties</h2>
-
+		{% if app.user is not null and 'ROLE_USER' in app.user.roles %}
 		<div class="text-end mb-3">
 			<a href="{{ path('app_sortie_creer') }}" class="btn" style="background-color:#a1b1c3; outline: none;">Créer une sortie</a>
 		</div>
-
+		{% endif %}
 		<table class="table table-striped table-over text-white">
 			<thead class="table-dark">
 				<tr>
@@ -153,8 +151,9 @@
 
 						<td>
 
-							{% if sortie.auteur == app.user %}
-								{% if sortie.etat == 'Créée' %}
+
+							{% if sortie.auteur == app.user or 'ROLE_ADMIN' in app.user.roles %}
+								{% if sortie.etat == 'Créée' and 'ROLE_USER' in app.user.roles  %}
 									<a href="{{ path('app_sortie_modifier',{id:sortie.id}) }}">
 										<button class="btn me-3" style="background-color:#F96321">Modifier</button>
 									</a>
@@ -165,7 +164,7 @@
 									<a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}">
 										<button class="btn me-3" style="background-color:#ffffff">Afficher</button>
 									</a>
-									<a href="{{ path('app_sortie_annuler',{id:sortie.id}) }}">
+										<a href="{{ path('app_sortie_annuler',{id:sortie.id}) }}">
 										<button class="btn" style="background-color:#FE0200">Annuler</button>
 									</a>
 								{% endif %}
@@ -185,7 +184,7 @@
 										</a>
 									{% endif %}
 
-								{% elseif sortie.etat=='Ouverte' and sortie.usersInscrits|length <  sortie.nbInscriptionsMax and 'now'| date('d/m/y')  <=  (sortie.dateCloture | date('d/m/Y'))  %}
+								{% elseif sortie.etat=='Ouverte' and sortie.usersInscrits|length <  sortie.nbInscriptionsMax and 'now'| date('d/m/y')  <=  (sortie.dateCloture | date('d/m/Y')) and 'ROLE_USER' in app.user.roles  %}
 									<a href="{{ path('app_sortie_inscription',{id:sortie.id}) }}">
 										<button class="btn btn-primary">S'inscrire</button>
 									</a>
@@ -195,6 +194,7 @@
 							{% endif %}
 
 						</td>
+
 					</tr>
 				{% endfor %}
 			</tbody>

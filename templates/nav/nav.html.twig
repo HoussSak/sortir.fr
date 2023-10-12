@@ -38,23 +38,27 @@
 
 				{% endif %}
 
-				{% if is_granted('ROLE_ADMIN') %}
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle text-white fs-5" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dashboard</a>
-						<ul class="dropdown-menu bg-light" aria-labelledby="navbarDropdown">
-							<li>
-								<a class="dropdown-item text-dark" href="{{ path('app_ville') }}">Villes</a>
-							</li>
-							<li>
-								<a class="dropdown-item text-dark" href="{{ path('app_site') }}">Sites</a>
-							</li>
-							<li><hr class="dropdown-divider"></li>
-							<li>
-								<a class="dropdown-item text-dark" href="{{ path('app_register') }}">Inscription</a>
-							</li>
-						</ul>
-					</li>
-				{% endif %}
+{% if is_granted('ROLE_ADMIN') %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-white fs-5" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dashboard</a>
+        <ul class="dropdown-menu bg-light" aria-labelledby="navbarDropdown">
+            <li>
+                <a class="dropdown-item text-dark" href="{{ path('app_ville') }}">Villes</a>
+            </li>
+            <li>
+                <a class="dropdown-item text-dark" href="{{ path('app_site') }}">Sites</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item text-dark" href="{{ path('app_register') }}">Inscription</a>
+            </li>
+			<li>
+				<a class="dropdown-item text-dark" href="{{ path('app_dashboard') }}">Gestion des utilisateurs</a>
+			</li>
+        </ul>
+    </li>
+{% endif %}
+
 			</ul>
 		</div>
 	</div>
