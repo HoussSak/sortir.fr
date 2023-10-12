@@ -37,12 +37,13 @@
 					</li>
 
 				{% endif %}
+
 				{% if is_granted('ROLE_ADMIN') %}
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dashboard</a>
 						<ul class="dropdown-menu bg-danger" aria-labelledby="navbarDropdown">
 							<li>
-								<a class="dropdown-item text-white" href="{{ path('app_ville') }}">Villes</a>
+								<a class="dropdown-item text-white" style href="{{ path('app_ville') }}">Villes</a>
 							</li>
 							<li>
 								<a class="dropdown-item text-white" href="{{ path('app_site') }}">Sites</a>
