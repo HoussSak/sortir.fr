@@ -34,6 +34,25 @@ footer {
     object-fit: cover; 
 }
 
+.bg-light-gray {
+    background-color: #82909f; /* Gris clair */
+}
+
+.bg-light-green {
+    background-color: #3c5065; /* Gris foncé */
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+.table td, .table th {
+    border: none;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+}
 
 
 
