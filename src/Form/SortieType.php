@@ -34,43 +34,11 @@ class SortieType extends AbstractType
                 'widget'=>'single_text'
             ])
             ->add('descriptioninfos')
-         //   ->add(
-         //       'ville',
-//
-         //       EntityType::class,
-//
-         //       [
-//
-         //           'mapped' => false,
-//
-         //           'class' => Ville::class,
-//
-         //           'choice_label' => 'nom',
-//
-         //       ]
-//
-         //   )
             ->add('lieu',null,["choice_label"=>"nom"])
-
-
-
-
             ->add('nbInscriptionsMax')
             ->add('urlPhoto')
-
-
-
-
-
         ;
-
-
-
-
     }
-
-
-
 
     public function configureOptions(OptionsResolver $resolver): void
     {

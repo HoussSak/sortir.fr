@@ -40,14 +40,15 @@
 					</select>
 				</div>
 				<!-- Choisir un site -->
-				<div class="mb-2">
-					<select class="form-select form-select-sm" aria-label=".form-select-sm example" name="site">
-						<option selected>Selectionner le site</option>
-						{% for site in sites %}
-							<option value="{{ site.id }}">{{ site.nom }}</option>
-						{% endfor %}
-					</select>
-				</div>
+			<div class="mb-2">
+				<select class="form-select form-select-sm" aria-label=".form-select-sm example" name="site">
+					<option value="" {% if not app.session.get('selected_site_id') %}selected{% endif %}>Selectionner le site</option>
+					{% for site in sites %}
+						<option value="{{ site.id }}" {% if app.session.get('selected_site_id') == site.id %}selected{% endif %}>{{ site.nom }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
 			</div>
 
 			<div
