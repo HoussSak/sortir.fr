@@ -51,5 +51,4 @@ class MainController extends AbstractController
             'userSite' => $userSite,
         ]);
     }
-
 }
