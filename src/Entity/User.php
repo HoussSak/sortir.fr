@@ -43,6 +43,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column(type: 'string')]
+    #[Assert\Regex(
+        pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/",
+        message: "Le mot de passe doit contenir au moins 12 caractères avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial."
+     )]
     private $password;
 
     #[ORM\Column(type: 'string', length: 30)]
@@ -74,7 +78,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $photo;
 
-    #[ORM\Column(type: 'string', length: 30)]
+    #[ORM\Column(type: 'string', length: 30, unique: true)]
     #[Assert\NotBlank(message: 'Veuillez renseigner un pseudo!')]
     #[Assert\Length(
         min: 3,
@@ -82,11 +86,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         minMessage: 'Minimum 5 caractères svp!',
         maxMessage: 'Maximum 50 caractères svp!'
     )]
-    #[Assert\Regex(pattern: '/^[a-z0-9_-]+$/i', message: 'Please use only letters, numbers, underscores, and dashes!')]
     private $pseudo;
 
     #[ORM\Column(type: 'integer')]
     #[Assert\NotBlank(message: 'Veuillez renseigner un numéro de téléphone!')]
+    #[Assert\Length(
+        min : 10,
+        minMessage : "Le numéro de téléphone doit contenir au moins {{ limit }} chiffres",
+    )]
     private $telephone;
 
     #[ORM\ManyToOne(targetEntity: Site::class, inversedBy: 'users')]

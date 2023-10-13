@@ -40,8 +40,8 @@
                                             label: 'Prénom',
                                             attr: {
                                                 class: 'form-control',
-                                                disabled: 'ROLE_ADMIN' in app.user.roles ? false : true
-                                                
+                                                readOnly: 'ROLE_ADMIN' in app.user.roles ? false : true
+
                                             }
                                         }) }}
                                     </div>
@@ -53,7 +53,7 @@
                                                 label: 'Nom',
                                                 attr: {
                                                     class: 'form-control',
-                                                    disabled: 'ROLE_ADMIN' in app.user.roles ? false : true
+                                                readOnly: 'ROLE_ADMIN' in app.user.roles ? false : true
                                                 }
                                             }) }}
                                     </div>
@@ -91,7 +91,7 @@
                                         label: 'Site',
                                         attr: {
                                             class: 'form-control',
-                                            disabled: 'ROLE_ADMIN' in app.user.roles ? false : true
+                                            readOnly: 'ROLE_ADMIN' in app.user.roles ? false : true
                                         }
                                     }) }}
                                 </div>

@@ -23,7 +23,7 @@ class UserFixtures extends Fixture
         // Création d'un utilisateur admin
         $admin = new User();
         $admin->setEmail('admin@admin.com');
-        $admin->setPassword($this->passwordHasher->hashPassword($admin, 'adminadmin')); // Encodage du mot de passe
+        $admin->setPassword($this->passwordHasher->hashPassword($admin, 'Adminadmin1!')); // Encodage du mot de passe
         $admin->setRoles(['ROLE_ADMIN']);
         $admin->setNom('Admin');
         $admin->setPrenom('Admin');
@@ -36,7 +36,7 @@ class UserFixtures extends Fixture
         // Création d'un utilisateur standard
         $user = new User();
         $user->setEmail('user@user.com');
-        $user->setPassword($this->passwordHasher->hashPassword($user, 'useruser')); // Encodage du mot de passe
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'Useruser1!')); // Encodage du mot de passe
         $user->setRoles(['ROLE_USER']);
         $user->setNom('User');
         $user->setPrenom('User');

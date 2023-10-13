@@ -22,21 +22,24 @@ class UserController extends AbstractController
         $form = $this->createForm(ModifierProfilFormType::class, $user);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+            $plainPassword = $form->get('plainPassword')->getData();
 
-            $entityManager->persist($user);
-            $entityManager->flush();
-            // do anything else you need here, like send an email
-            $this->addFlash('success', 'Votre compte à été modifié  avec succes!');
+            if ($userPasswordHasher->isPasswordValid($user, $plainPassword)) {
 
-            return $this->redirectToRoute('app_home');
+                $entityManager->persist($user);
+                $entityManager->flush();
+                // do anything else you need here, like send an email
+                $this->addFlash('success', 'Votre compte à été modifié  avec succes!');
+                return $this->redirectToRoute('app_home');
+
+            } else {
+                $this->addFlash('danger', 'Veuillez saisir votre mot de passe actuel');
+                return $this->redirectToRoute('app_user_edit');
+
+            }
+
         }
 
         return $this->render('user/index.html.twig', [
