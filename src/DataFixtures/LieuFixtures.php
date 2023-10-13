@@ -68,6 +68,10 @@ class LieuFixtures extends  Fixture
         }
 
         $manager->flush();
+
+
+
+
     }
 
 }

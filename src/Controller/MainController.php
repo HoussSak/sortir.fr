@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\AnnulationType;
+use App\Entity\User;
 use App\Form\FiltreSortieType;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
 
 class MainController extends AbstractController
 {
@@ -20,30 +19,28 @@ class MainController extends AbstractController
         SortieRepository $sortieRepository,
         Request $request
     ): Response {
-        if (!$this->getUser()) {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
             return $this->redirectToRoute('app_login');
         }
 
         $sites = $siteRepository->findAll();
+        $userSite = $user->getSite();
 
         $filtreForm = $this->createForm(FiltreSortieType::class);
         $filtreForm->handleRequest($request);
 
         $choixSite = $request->request->get('site');
-        $request->getSession()->set('selected_site_id', $choixSite);
 
-
-        $choixInscrit = $request->request->get('organisateur');
-        $inscrit = $request->request->get('inscrit');
-
-        $sorties = $sortieRepository->findAll();
+        // By default, display Sorties from the user's site
+        $sorties = $sortieRepository->findByExampleField($userSite->getId());
 
         if ($filtreForm->isSubmitted()) {
             if ($choixSite) {
+                // Set the selected site to the session
+                $request->getSession()->set('selected_site_id', $choixSite);
+
                 $sorties = $sortieRepository->findByExampleField($choixSite);
-            }
-            if ($choixInscrit) {
-                $sorties = $sortieRepository->findOne($choixInscrit);
             }
         }
 
@@ -51,6 +48,8 @@ class MainController extends AbstractController
             'sites' => $sites,
             'sorties' => $sorties,
             'filtreForm' => $filtreForm->createView(),
+            'userSite' => $userSite,
         ]);
     }
+
 }
