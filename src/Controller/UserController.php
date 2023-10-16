@@ -23,11 +23,10 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $plainPassword = $form->get('plainPassword')->getData();
 
             if ($userPasswordHasher->isPasswordValid($user, $plainPassword)) {
-
                 $entityManager->persist($user);
                 $entityManager->flush();
                 // do anything else you need here, like send an email
