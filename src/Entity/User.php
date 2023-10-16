@@ -88,6 +88,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'integer')]
     #[Assert\NotBlank(message: 'Veuillez renseigner un numéro de téléphone!')]
+    #[Assert\Length(
+        min : 10,
+        minMessage : "Le numéro de téléphone doit contenir au moins {{ limit }} chiffres",
+    )]
+    #[Assert\Regex(
+        pattern: '/^0[1-9]/',
+        message: 'Le numéro de téléphone doit commencer par un chiffre entre 01 et 09',
+    )]
     private $telephone;
 
     #[ORM\ManyToOne(targetEntity: Site::class, inversedBy: 'users')]

@@ -30,7 +30,6 @@ class LieuFixtures extends  Fixture
 
         $manager->flush();
 
-
         $villes = $manager->getRepository(Ville::class)->findAll();
 
         $lieuxData = [
