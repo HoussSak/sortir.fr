@@ -33,14 +33,17 @@ class MainController extends AbstractController
         $choixSite = $request->request->get('site');
 
         // By default, display Sorties from the user's site
-        $sorties = $sortieRepository->findByExampleField($userSite->getId());
+        if ($user->getRoles())
+        if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+            $sorties = $sortieRepository->findAll();
+        } else {
+            $sorties = $sortieRepository->findByExampleField($userSite->getId());
+        }
 
         if ($filtreForm->isSubmitted()) {
             if ($choixSite) {
                 // Set the selected site to the session
                 $request->getSession()->set('selected_site_id', $choixSite);
-
-                $sorties = $sortieRepository->findByExampleField($choixSite);
             }
         }
 

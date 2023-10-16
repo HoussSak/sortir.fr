@@ -30,7 +30,7 @@ class UserFixtures extends Fixture
         $admin->setAdministrateur(true);
         $admin->setActif(true);
         $admin->setPseudo('admin');
-        $admin->setTelephone(0601055467);
+        $admin->setTelephone('0601055467');
         $manager->persist($admin);
 
         // Création d'un utilisateur standard
@@ -43,7 +43,7 @@ class UserFixtures extends Fixture
         $user->setAdministrateur(false);
         $user->setActif(true);
         $user->setPseudo('user');
-        $user->setTelephone(0601055467);
+        $user->setTelephone('0601055467');
         $manager->persist($user);
 
         $manager->flush();

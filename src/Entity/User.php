@@ -52,9 +52,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 30)]
     #[Assert\NotBlank(message: 'Veuillez renseigner un nom!')]
     #[Assert\Length(
-        min: 3,
+        min: 2,
         max: 50,
-        minMessage: 'Minimum 3 caractères svp!',
+        minMessage: 'Minimum 2 caractères svp!',
         maxMessage: 'Maximum 50 caractères svp!'
     )]
     private $nom;
@@ -62,9 +62,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 40)]
     #[Assert\NotBlank(message: 'Veuillez renseigner un prénom!')]
     #[Assert\Length(
-        min: 3,
+        min: 2,
         max: 50,
-        minMessage: 'Minimum 3 caractères svp!',
+        minMessage: 'Minimum 2 caractères svp!',
         maxMessage: 'Maximum 50 caractères svp!'
     )]
     private $prenom;
@@ -81,18 +81,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 30, unique: true)]
     #[Assert\NotBlank(message: 'Veuillez renseigner un pseudo!')]
     #[Assert\Length(
-        min: 3,
+        min: 2,
         max: 50,
-        minMessage: 'Minimum 5 caractères svp!',
+        minMessage: 'Minimum 2 caractères svp!',
         maxMessage: 'Maximum 50 caractères svp!'
     )]
     private $pseudo;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'string', length: 10)]
     #[Assert\NotBlank(message: 'Veuillez renseigner un numéro de téléphone!')]
     #[Assert\Length(
         min : 10,
         minMessage : "Le numéro de téléphone doit contenir au moins {{ limit }} chiffres",
+    )]
+    #[Assert\Regex(
+        pattern: '/^0[1-9]/',
+        message: 'Le numéro de téléphone doit commencer par un chiffre entre 01 et 09',
     )]
     private $telephone;
 
@@ -252,12 +256,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getTelephone(): ?int
+    public function getTelephone(): ?string
     {
         return $this->telephone;
     }
 
-    public function setTelephone(int $telephone): self
+    public function setTelephone(string $telephone): self
     {
         $this->telephone = $telephone;
 

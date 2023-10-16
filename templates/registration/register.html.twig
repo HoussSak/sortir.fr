@@ -126,20 +126,25 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-1 d-flex align-items-center">
-                                        <!-- Checkbox only without label for alignment -->
-                                        {{ form_widget(registrationForm.administrateur) }}
-                                    </div>
-                                    <div class="col-md-5">
-                                        <!-- Label for the checkbox -->
-                                        <label class="form-check-label" for="{{ registrationForm.administrateur.vars.id }}">Administrateur</label>
+                                    <div class="col-md-6">
+
+                                        {{ form_row(registrationForm.administrateur,{
+                                            attr:{
+                                                class: 'form-check-input',
+                                                hidden: true
+
+                                            },row_attr:{
+                                                class:'form-check',
+                                                hidden: true
+                                            }
+                                        }) }}
                                     </div>
                                     <div class="col-md-6">
 
                                         {{ form_row(registrationForm.actif,{
                                             attr:{
-                                                class: 'form-check-input'
-
+                                                class: 'form-check-input',
+                                                checked: true
                                             },row_attr:{
                                                 class:'form-check'
                                             }
