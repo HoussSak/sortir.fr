@@ -42,17 +42,15 @@
 				<!-- Choisir un site -->
 				<div class="mb-2">
 					<select class="form-select form-select-sm" aria-label=".form-select-sm example" name="site">
-						<option value="" {% if not app.session.get('selected_site_id') %} selected {% endif %}>Selectionner le site</option>
+						<option value="" {% if not app.session.get('selected_site_id') %}selected{% endif %}>Selectionner le site</option>
 						{% for site in sites %}
-							<option value="{{ site.id }}" {% if app.session.get('selected_site_id') == site.id %} selected {% endif %}>{{ site.nom }}</option>
+							<option value="{{ site.id }}" {% if app.session.get('selected_site_id') == site.id %}selected{% endif %}>{{ site.nom }}</option>
 						{% endfor %}
 					</select>
 				</div>
-
 			</div>
 
-			<div
-				class="col-md-auto mx-4 mt-5">
+			<div class="col-md-auto mx-4 mt-5">
 				<!-- Date de début -->
 				<div class="form-outline mb-2">
 					<label for="dateDebut" class="text-white">Date de début</label>
@@ -85,8 +83,7 @@
 			</div>
 		</div>
 
-		<div
-			class="row justify-content-center mt-2">
+		<div class="row justify-content-center mt-2">
 			<!-- Boutons -->
 			<div class="col-md-auto mt-5">
 				<button type="submit" class="btn text-white" style="background-color:#214264; border-radius: 20px;">Rechercher</button>
@@ -100,6 +97,7 @@
 	{% set target_site_id = app.session.get('selected_site_id') ? app.session.get('selected_site_id') : app.user.site.id %}
 
 
+
 	<!-- Tableau des sorties -->
 	<div class="mt-4 container">
 		<h2 style="mb-3; color: #7B8997;">Liste des sorties</h2>
@@ -110,104 +108,101 @@
 		{% endif %}
 		<table class="table table-striped table-over text-white">
 			<thead class="table-dark">
-				<tr>
-					<th scope="col">#</th>
-					<th scope="col">Nom de la sortie</th>
-					<th scope="col">Date de la sortie</th>
-					<th scope="col">Cloture</th>
-					<th scope="col">inscrits/places</th>
-					<th scope="col">Etat</th>
-					<th scope="col">Inscrit</th>
-					<th scope="col">Organisateur</th>
-					<th scope="col">Actions</th>
-				</tr>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Nom de la sortie</th>
+				<th scope="col">Date de la sortie</th>
+				<th scope="col">Cloture</th>
+				<th scope="col">inscrits/places</th>
+				<th scope="col">Etat</th>
+				<th scope="col">Inscrit</th>
+				<th scope="col">Organisateur</th>
+				<th scope="col">Actions</th>
+			</tr>
 			</thead>
 
 			<tbody>
-				{% set target_site = sortie.site is defined ? sortie.site : app.user.site %}
+			{%  for sortie in sorties %}
+				<tr class="{{ loop.index is odd ? 'bg-light-gray' : 'bg-light-green' }}">
+					<th scope="row">{{ loop.index }}</th>
+					<td>{{ sortie.nom }}</td>
+					<td>{{ sortie.dateDebut | date('d/m/Y H:i')}}</td>
+					<td>{{ sortie.dateCloture | date('d/m/Y')}}</td>
+					<td>{{ sortie.usersInscrits|length }}/{{ sortie.nbInscriptionsMax }}</td>
+					<td>{{ sortie.etat }}</td>
+					<td>
+						{%  set inscrit = false %}
+						{%  for u in sortie.usersInscrits %}
+							{% if u== app.user%}
+								{%  set inscrit = true %}
+							{% endif %}
+						{% endfor %}
 
-				{%  for sortie in sorties %}
-					{% if sortie.site == target_site %}
-
-						{% if sortie.site == app.user.site %}
-							<tr class="{{ loop.index is odd ? 'bg-light-gray' : 'bg-light-green' }}">
-								<th scope="row">{{ loop.index }}</th>
-								<td>{{ sortie.nom }}</td>
-								<td>{{ sortie.dateDebut | date('d/m/Y H:i')}}</td>
-								<td>{{ sortie.dateCloture | date('d/m/Y')}}</td>
-								<td>{{ sortie.usersInscrits|length }}/{{ sortie.nbInscriptionsMax }}</td>
-								<td>{{ sortie.etat }}</td>
-								<td>
-									{%  set inscrit = false %}
-									{%  for u in sortie.usersInscrits %}
-										{% if u== app.user%}
-											{%  set inscrit = true %}
-										{% endif %}
-									{% endfor %}
-
-									{% if inscrit %}
-										X
-									{% endif %}
-
-
-								</td>
-								<td>
-									<a href="{{ path('app_user_afficher',{id:sortie.auteur.id}) }}" class="text-decoration-none">
-										{{ sortie.auteur.nom |capitalize }}
-										{{ sortie.auteur.prenom [:1] }}</a>
-								</td>
-
-								<td>
-
-
-									{% if sortie.auteur == app.user or 'ROLE_ADMIN' in app.user.roles %}
-										{% if sortie.etat == 'Créée' and 'ROLE_USER' in app.user.roles  %}
-											<a href="{{ path('app_sortie_modifier',{id:sortie.id}) }}">
-												<button class="btn me-3" style="background-color:#F96321">Modifier</button>
-											</a>
-											<a href="{{ path('app_sortie_publication',{id:sortie.id}) }}">
-												<button class="btn" style="background-color:#2CB451">Publier</button>
-											</a>
-										{% elseif sortie.etat == 'Ouverte' %}
-											<a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}">
-												<button class="btn me-3" style="background-color:#ffffff">Afficher</button>
-											</a>
-											<a href="{{ path('app_sortie_annuler',{id:sortie.id}) }}">
-												<button class="btn" style="background-color:#FE0200">Annuler</button>
-											</a>
-										{% endif %}
-
-									{% elseif sortie.auteur != app.user %}
-										<a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}">
-											<button class="btn btn-primary">Afficher</button>
-										</a>
-
-
-										{% if inscrit  %}
-
-											{%  if  'now'| date('d/m/y H:i')  <  sortie.dateDebut | date('d/m/Y H:i') or not 'now'| date('d/m/y')  >  sortie.dateCloture | date('d/m/Y') %}
-
-												<a href="{{ path('app_sortie_desister',{id:sortie.id}) }}">
-													<button class="btn btn-danger">Se désister</button>
-												</a>
-											{% endif %}
-
-										{% elseif sortie.etat=='Ouverte' and sortie.usersInscrits|length <  sortie.nbInscriptionsMax and 'now'| date('d/m/y')  <=  (sortie.dateCloture | date('d/m/Y')) and 'ROLE_USER' in app.user.roles  %}
-											<a href="{{ path('app_sortie_inscription',{id:sortie.id}) }}">
-												<button class="btn btn-primary">S'inscrire</button>
-											</a>
-
-										{% endif %}
-									{% endif %}
-								</td>
-							</tr>
+						{% if inscrit %}
+							X
 						{% endif %}
 
-					{% endif %}
-				{% endfor %}
-			</tbody>
-		</tbody>
-	</table>
-</div>{% endblock %}{% block footer %}
-{{ parent () }}{% endblock %}
 
+					</td>
+					<td>
+						<a href="{{ path('app_user_afficher',{id:sortie.auteur.id}) }}" class="text-decoration-none">
+							{{ sortie.auteur.nom |capitalize }}
+							{{ sortie.auteur.prenom [:1] }}</a>
+					</td>
+
+					<td>
+
+
+						{% if sortie.auteur == app.user or 'ROLE_ADMIN' in app.user.roles %}
+							{% if sortie.etat == 'Créée' and 'ROLE_USER' in app.user.roles  %}
+								<a href="{{ path('app_sortie_modifier',{id:sortie.id}) }}">
+									<button class="btn me-3" style="background-color:#F96321">Modifier</button>
+								</a>
+								<a href="{{ path('app_sortie_publication',{id:sortie.id}) }}">
+									<button class="btn" style="background-color:#2CB451">Publier</button>
+								</a>
+							{% elseif sortie.etat == 'Ouverte' %}
+								<a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}">
+									<button class="btn me-3" style="background-color:#ffffff">Afficher</button>
+								</a>
+								<a href="{{ path('app_sortie_annuler',{id:sortie.id}) }}">
+									<button class="btn" style="background-color:#FE0200">Annuler</button>
+								</a>
+							{% endif %}
+
+						{% elseif sortie.auteur != app.user %}
+							<a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}">
+								<button class="btn btn-primary">Afficher</button>
+							</a>
+
+
+							{% if inscrit  %}
+
+								{%  if  'now'| date('d/m/y H:i')  <  sortie.dateDebut | date('d/m/Y H:i') or not 'now'| date('d/m/y')  >  sortie.dateCloture | date('d/m/Y') %}
+
+									<a href="{{ path('app_sortie_desister',{id:sortie.id}) }}">
+										<button class="btn btn-danger">Se désister</button>
+									</a>
+								{% endif %}
+
+							{% elseif sortie.etat=='Ouverte' and sortie.usersInscrits|length <  sortie.nbInscriptionsMax and 'now'| date('d/m/y')  <=  (sortie.dateCloture | date('d/m/Y')) and 'ROLE_USER' in app.user.roles  %}
+								<a href="{{ path('app_sortie_inscription',{id:sortie.id}) }}">
+									<button class="btn btn-primary">S'inscrire</button>
+								</a>
+
+							{% endif %}
+
+						{% endif %}
+
+					</td>
+
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+{% endblock %}
+{% block footer %}
+	{{ parent () }}
+{% endblock %}

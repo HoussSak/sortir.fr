@@ -44,14 +44,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     
     #[ORM\Column(type: 'string')]
+    #[Assert\Regex(
+        pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/",
+        message: "Le mot de passe doit contenir au moins 12 caractères avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial."
+     )]
     private $password;
 
     #[ORM\Column(type: 'string', length: 30)]
     #[Assert\NotBlank(message: 'Veuillez renseigner un nom!')]
     #[Assert\Length(
-        min: 3,
+        min: 2,
         max: 50,
-        minMessage: 'Minimum 3 caractères svp!',
+        minMessage: 'Minimum 2 caractères svp!',
         maxMessage: 'Maximum 50 caractères svp!'
     )]
     private $nom;
@@ -59,9 +63,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 40)]
     #[Assert\NotBlank(message: 'Veuillez renseigner un prénom!')]
     #[Assert\Length(
-        min: 3,
+        min: 2,
         max: 50,
-        minMessage: 'Minimum 3 caractères svp!',
+        minMessage: 'Minimum 2 caractères svp!',
         maxMessage: 'Maximum 50 caractères svp!'
     )]
     private $prenom;
@@ -75,18 +79,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $photo;
 
-    #[ORM\Column(type: 'string', length: 30)]
+    #[ORM\Column(type: 'string', length: 30, unique: true)]
     #[Assert\NotBlank(message: 'Veuillez renseigner un pseudo!')]
     #[Assert\Length(
-        min: 3,
+        min: 2,
         max: 50,
-        minMessage: 'Minimum 5 caractères svp!',
+        minMessage: 'Minimum 2 caractères svp!',
         maxMessage: 'Maximum 50 caractères svp!'
     )]
-    #[Assert\Regex(pattern: '/^[a-z0-9_-]+$/i', message: 'Please use only letters, numbers, underscores, and dashes!')]
     private $pseudo;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'string', length: 10)]
     #[Assert\NotBlank(message: 'Veuillez renseigner un numéro de téléphone!')]
     #[Assert\Length(
         min : 10,
@@ -254,12 +257,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getTelephone(): ?int
+    public function getTelephone(): ?string
     {
         return $this->telephone;
     }
 
-    public function setTelephone(int $telephone): self
+    public function setTelephone(string $telephone): self
     {
         $this->telephone = $telephone;
 
