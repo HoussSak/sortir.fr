@@ -7,6 +7,7 @@
 
 {% block body %}
 	{{ parent() }}
+	<script src="{{ asset('js/filter.js') }}"></script>
 	<div>
 		{% for message in app.flashes('success') %}
 			<div class="alert alert-success">
@@ -24,26 +25,38 @@
 		{{ form_start(filtreForm) }}
 		<div class="row justify-content-center flex-equal-height">
 			<div class="col-md-auto mx-4 mt-2">
-				<h2 style="mb-3; color: #7B8997;">Filtrer les sorties</h2>
+				<h2 class="mb-3" style= "color: #7B8997;">Filtrer les sorties</h2>
 				<!-- Barre de recherche -->
 				<div class="form-outline mb-2">
-					<input type="search" id="form1" class="form-control" placeholder="Rechercher une sortie par mot clé"/>
+					<input type="search" id="search" class="form-control" placeholder="Rechercher une sortie par mot clé"/>
 				</div>
 				<!-- Choisir un statut -->
+
 				<div class="mb-2">
-					<select class="form-select form-select-sm" aria-label=".form-select-sm example" name="site">
+
+					<select class="form-select form-select-sm" aria-label=".form-select-sm example" name="etat">
+
 						<option selected>Selectionner un statut</option>
-						{% for site in sites %}
-							<option value="{{ site.id }}">{{ site.nom }}</option>
-						{% endfor %}
+
+						<option value="Ouverte">Ouverte</option>
+
+						<option value="Créée">Créée</option>
+
+						<option value="Annulée">Annulée</option>
+
+						<option value="Passée">Passée</option>
+
+						<option value="En Cours">En cours</option>
+
 					</select>
+
 				</div>
 				<!-- Choisir un site -->
 				<div class="mb-2">
 					<select class="form-select form-select-sm" aria-label=".form-select-sm example" name="site">
-						<option value="" {% if not app.session.get('selected_site_id') %}selected{% endif %}>Selectionner le site</option>
+						<option selected>Selectionner le site</option>
 						{% for site in sites %}
-							<option value="{{ site.id }}" {% if app.session.get('selected_site_id') == site.id %}selected{% endif %}>{{ site.nom }}</option>
+							<option value="{{ site.nom }}">{{ site.nom }}</option>
 						{% endfor %}
 					</select>
 				</div>
@@ -85,15 +98,13 @@
 		<div class="row justify-content-center mt-2">
 			<!-- Boutons -->
 			<div class="col-md-auto mt-5">
-				<button type="submit" class="btn text-white" style="background-color:#214264; border-radius: 20px;">Rechercher</button>
-				<span class="mx-5"></span>
-				<button type="reset" class="btn text-white" style="background-color:#214264; border-radius: 20px;">Réinitialiser</button>
+				<button type="reset" class="btn text-white" style="background-color:#214264; border-radius: 20px;"><a href="{{ path('app_home') }}" class="text-white" style="text-decoration: none">Réinitialiser</a></button>
 			</div>
 		</div>
 		{{ form_end(filtreForm) }}
 	</div>
 
-
+		<span hidden id="userSite">{{ app.user.site ? app.user.site.nom : 'null' }}</span>
 
 	<!-- Tableau des sorties -->
 	<div class="mt-4 container">
@@ -114,6 +125,7 @@
 				<th scope="col">Etat</th>
 				<th scope="col">Inscrit</th>
 				<th scope="col">Organisateur</th>
+				<th scope="col">Site</th>
 				<th scope="col">Actions</th>
 			</tr>
 			</thead>
@@ -122,7 +134,7 @@
 				<tr class="{{ loop.index is odd ? 'bg-light-gray' : 'bg-light-green' }}">
 					<th scope="row">{{ loop.index }}</th>
 					<td>{{ sortie.nom }}</td>
-					<td>{{ sortie.dateDebut | date('d/m/Y H:i')}}</td>
+					<td>{{ sortie.dateDebut | date('d/m/Y')}}</td>
 					<td>{{ sortie.dateCloture | date('d/m/Y')}}</td>
 					<td>{{ sortie.usersInscrits|length }}/{{ sortie.nbInscriptionsMax }}</td>
 					<td>{{ sortie.etat }}</td>
@@ -142,9 +154,9 @@
 					</td>
 					<td>
 						<a href="{{ path('app_user_afficher',{id:sortie.auteur.id}) }}" class="text-decoration-none">
-							{{ sortie.auteur.nom |capitalize }}
-							{{ sortie.auteur.prenom [:1] }}</a>
+							{{ sortie.auteur.prenom |capitalize }} {{ sortie.auteur.nom [:1] }}</a>
 					</td>
+					<td>{{ sortie.auteur.site.nom }}</td>
 
 					<td>
 
