@@ -14,6 +14,8 @@ use App\Repository\SiteRepository;
 
 use App\Repository\SortieRepository;
 
+use App\utils\EtatEnum;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -36,9 +38,25 @@ class MainController extends AbstractController
 
         SortieRepository $sortieRepository,
 
-        Request $request
+        Request $request,
+        EntityManagerInterface $entityManager
 
     ): Response {
+
+        $sortiesList = $sortieRepository->findAll();
+        $today = new \DateTime();
+        foreach ($sortiesList as $sortie) {
+        if ($sortie->getDateDebut() !== null && $sortie->getDateDebut()->format('Y-m-d') === $today->format('Y-m-d')) {
+        $sortie->setEtat(EtatEnum::EN_COURS);
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+         }
+        elseif($sortie->getDateDebut() !== null && $sortie->getDateDebut()->format('Y-m-d') < $today->format('Y-m-d')) {
+            $sortie->setEtat(EtatEnum::PASSEE);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+        }
+}
 
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -50,18 +68,8 @@ class MainController extends AbstractController
         $filtreForm = $this->createForm(FiltreSortieType::class);
         $filtreForm->handleRequest($request);
 
-        $choixSite = $request->request->get('site');
+        $sorties = $sortieRepository->findAll();
 
-        if ($filtreForm->isSubmitted() && $choixSite) {
-            $request->getSession()->set('selected_site_id', $choixSite);
-        }
-        $selectedSiteId = $request->getSession()->get('selected_site_id', $userSite->getId());
-
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $sorties = $sortieRepository->findAll();
-        } else {
-            $sorties = $sortieRepository->findBy(['site' => $selectedSiteId]);
-        }
         return $this->render('main/index.html.twig', [
             'sites' => $sites,
             'sorties' => $sorties,
