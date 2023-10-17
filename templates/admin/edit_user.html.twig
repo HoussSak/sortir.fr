@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block body %}
+    <section class="vh-100" style="background-color: #021F39;">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col col-xl-10">
+                    <div class="card" style="border-radius: 1rem;">
+                        <div class="row g-0">
+                            <div class="col-md-6 col-lg-5 d-none d-md-block">
+                                <img src="{{ asset('img/img1.webp') }}" alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;"/>
+                            </div>
+
+                            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                                <div class="card-body p-2 text-black">
+
+                                    <div class="d-flex flex-column align-items-center mb-3 pb-1">
+                                        <a href="{{ path('app_login') }}"><img src="{{ asset('img/Logo.svg') }} "
+                                                                               width="200" alt="sortir.com"></a>
+                                    </div>
+                                    <h4 class="fw-bold mb-2 text-center">Gestion de profil</h4>
+                                    <div>
+                                        {% for message in app.flashes('danger') %}
+                                            <div class="alert alert-danger">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    {{ form_start(registrationForm) }}
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                            {{ form_row(registrationForm.pseudo, {
+                                                label: 'Pseudo',
+                                                attr: {
+                                                    class: 'form-control',
+                                                    readOnly: true
+                                                }
+                                            }) }}
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            {{ form_row(registrationForm.prenom, {
+                                                label: 'Prénom',
+                                                attr: {
+                                                    class: 'form-control'
+                                                }
+                                            }) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                            {{ form_row(registrationForm.nom, {
+                                                label: 'Nom',
+                                                attr: {
+                                                    class: 'form-control'
+                                                }
+                                            }) }}
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            {{ form_row(registrationForm.telephone, {
+                                                label: 'Téléphone',
+                                                attr: {
+                                                    class: 'form-control',
+                                                    readOnly: true
+                                                }
+                                            }) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                            {{ form_row(registrationForm.email, {
+                                                label: 'Email',
+                                                attr: {
+                                                    class: 'form-control',
+                                                    readOnly: true
+                                                }
+                                            }) }}
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            {{ form_row(registrationForm.plainPassword, {
+                                                label: 'Password',
+                                                attr: {
+                                                    class: 'form-control'
+                                                }
+                                            }) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        {{ form_row(registrationForm.site, {
+                                            label: 'Site',
+                                            attr: {
+                                                class: 'form-control'
+                                            }
+                                        }) }}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        {{ form_row(registrationForm.photo, {
+                                            label: 'Photo',
+                                            attr: {
+                                                class: 'form-control'
+                                            }
+                                        }) }}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <button type="submit" class="btn btn-success">Enregistrer</button>
+                                        <a href="{{ path('app_home') }}" class="btn btn-secondary">Annuler</a>
+                                    </div>
+
+                                    {{ form_end(registrationForm) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ parent () }}
+{%  endblock %}

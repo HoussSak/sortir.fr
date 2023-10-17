@@ -98,7 +98,7 @@
 	<!-- Tableau des sorties -->
 	<div class="mt-4 container">
 		<h2 style="mb-3; color: #7B8997;">Liste des sorties</h2>
-		{% if app.user is not null and 'ROLE_USER' in app.user.roles %}
+		{% if app.user is not null and 'ROLE_USER' in app.user.roles and app.user.actif %}
 			<div class="text-end mb-3">
 				<a href="{{ path('app_sortie_creer') }}" class="btn" style="background-color:#a1b1c3; outline: none;">Créer une sortie</a>
 			</div>
@@ -157,18 +157,21 @@
 								<a href="{{ path('app_sortie_publication',{id:sortie.id}) }}">
 									<button class="btn" style="background-color:#2CB451">Publier</button>
 								</a>
-							{% elseif sortie.etat == 'Ouverte' %}
+							{% elseif sortie.etat != 'Créée'%}
 								<a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}">
 									<button class="btn me-3" style="background-color:#ffffff">Afficher</button>
 								</a>
+							{% if sortie.etat != 'Annulée' %}
 								<a href="{{ path('app_sortie_annuler',{id:sortie.id}) }}">
 									<button class="btn" style="background-color:#FE0200">Annuler</button>
 								</a>
 							{% endif %}
 
+							{% endif %}
+
 						{% elseif sortie.auteur != app.user %}
 							<a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}">
-								<button class="btn btn-primary">Afficher</button>
+								<button class="btn me-3" style="background-color:#ffffff">Afficher</button>
 							</a>
 
 
@@ -181,7 +184,7 @@
 									</a>
 								{% endif %}
 
-							{% elseif sortie.etat=='Ouverte' and sortie.usersInscrits|length <  sortie.nbInscriptionsMax and 'now'| date('d/m/y')  <=  (sortie.dateCloture | date('d/m/Y')) and 'ROLE_USER' in app.user.roles  %}
+							{% elseif sortie.etat=='Ouverte' and sortie.usersInscrits|length <  sortie.nbInscriptionsMax and 'now'| date('d/m/y')  <=  (sortie.dateCloture | date('d/m/Y')) and 'ROLE_USER' in app.user.roles and app.user.actif %}
 								<a href="{{ path('app_sortie_inscription',{id:sortie.id}) }}">
 									<button class="btn btn-primary">S'inscrire</button>
 								</a>
