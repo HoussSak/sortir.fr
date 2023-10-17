@@ -10,4 +10,5 @@ enum EtatEnum
     const ANNULEE = 'Annulée';
     const PASSEE = 'Passée';
     const EN_COURS = 'En Cours';
+    const ARCHIVEE = 'Archivée';
 }

@@ -22,9 +22,11 @@
                                         <a href="{{ path('app_login') }}"><img src="{{ asset('img/Logo.svg') }} "width="200" alt="sortir.com"></a>
                                         <span class="h2 fw-bold mb-0">{{ sortie.nom }}</span>
                                     </div>
+                                    {% if sortie.etat =='Annulée' %}
                                     <div>
                                        <p class="text-danger"> <b>Motif d'annulation :</b> {{ sortie.motifAnnulation }}</p>
                                     </div>
+                                    {% endif %}
 
                                     <div>
                                         <p>Nom : <b>{{ sortie.nom}}</b></p>

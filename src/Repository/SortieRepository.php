@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Sortie;
+use App\utils\EtatEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -74,6 +75,15 @@ class SortieRepository extends ServiceEntityRepository
             ->getResult()
 
         ;
+    }
+
+    public function findAllWithoutArchivee()
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.etat != :archivedState')
+            ->setParameter('archivedState', EtatEnum::ARCHIVEE)
+            ->getQuery()
+            ->getResult();
     }
 
 }

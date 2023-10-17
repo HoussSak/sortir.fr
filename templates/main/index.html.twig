@@ -173,7 +173,7 @@
 								<a href="{{ path('app_sortie_afficher',{id:sortie.id}) }}">
 									<button class="btn me-3" style="background-color:#ffffff">Afficher</button>
 								</a>
-							{% if sortie.etat != 'Annulée' %}
+							{% if sortie.etat != 'Annulée' and sortie.etat != 'En Cours'  %}
 								<a href="{{ path('app_sortie_annuler',{id:sortie.id}) }}">
 									<button class="btn" style="background-color:#FE0200">Annuler</button>
 								</a>
