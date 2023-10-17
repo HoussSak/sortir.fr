@@ -56,7 +56,22 @@ class MainController extends AbstractController
             $entityManager->persist($sortie);
             $entityManager->flush();
         }
-}
+        elseif($sortie->getDateCloture() !== null &&
+            $sortie->getDateCloture()->format('Y-m-d') < $today->format('Y-m-d') &&
+            $sortie->getEtat() == EtatEnum::OUVERTE
+        ) {
+            $sortie->setEtat(EtatEnum::CLOTUREE);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+        }
+       if ($sortie->getDateDebut() !== null &&
+                $sortie->getDateDebut()->diff($today)->m >= 1) {
+                $sortie->setEtat(EtatEnum::ARCHIVEE);
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+       }
+
+        }
 
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -68,7 +83,7 @@ class MainController extends AbstractController
         $filtreForm = $this->createForm(FiltreSortieType::class);
         $filtreForm->handleRequest($request);
 
-        $sorties = $sortieRepository->findAll();
+        $sorties = $sortieRepository->findAllWithoutArchivee();
 
         return $this->render('main/index.html.twig', [
             'sites' => $sites,
