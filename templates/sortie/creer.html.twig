@@ -4,7 +4,6 @@
 {% endblock %}
 
 {% block body %}
-
 	{% for label, messages in app.flashes %}
 		{% for message in messages %}
 			<div class="alert alert-{{ label }}">
@@ -50,16 +49,18 @@
 								<div class="col-md-6">
 									{{ form_row(sortieForm.dateCloture,{
                                     attr:{
-                                        class:'form-control '
-                                    },row_attr:{
+                                        class:'form-control'
+										},row_attr:{
                                         class:'form-group'
+
                                     }
                                 }) }}
 								</div>
 								<div class="col-md-6">
 									{{ form_row(sortieForm.nbInscriptionsMax,{
                                     attr:{
-                                        class:'form-control '
+                                        class:'form-control ',
+										min:1
                                     },row_attr:{
                                         class:'form-group'
                                     }
@@ -68,7 +69,8 @@
 								<div class="col-md-6">
 									{{ form_row(sortieForm.duree,{
                                     attr:{
-                                        class:'form-control '
+                                        class:'form-control ',
+										min:1
                                     },row_attr:{
                                         class:'form-group'
                                     }

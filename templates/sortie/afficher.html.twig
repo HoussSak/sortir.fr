@@ -98,8 +98,14 @@
                                             {%  for u in sortie.usersInscrits %}
                                             <tr>
                                                 <th scope="row"></th>
-                                                <td><a href="{{ path('app_user_afficher',{id:u.id}) }}">{{ u.pseudo |upper }}</a></td>
 
+                                                <td>{% if sortie.auteur ==   app.user or u == app.user%}
+                                                    <a href="{{ path('app_user_afficher',{id:u.id}) }}">{{ u.pseudo |upper }}</a>
+                                                        {% else %}
+                                                           {{ u.pseudo |upper }}
+                                                    {% endif %}
+
+                                                </td>
 
                                                 <td>{{ u.nom |capitalize}}   {{ u.prenom}}</td>
                                             </tr>
