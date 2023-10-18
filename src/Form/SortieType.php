@@ -35,13 +35,7 @@ class SortieType extends AbstractType
             ->add('duree')
             ->add('dateCloture',DateType::class,[
                 'html5'=>true,
-                'widget'=>'single_text',
-                'constraints' => [
-                    new LessThan([
-                        'value' => 'today',
-                        'message' => 'La date de clôture doit être inférieure à la date de début.',
-                    ]),
-                ],
+                'widget'=>'single_text'
             ])
             ->add('descriptioninfos')
             ->add('lieu',null,["choice_label"=>"nom"])
