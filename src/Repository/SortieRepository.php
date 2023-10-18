@@ -60,11 +60,6 @@ class SortieRepository extends ServiceEntityRepository
             ;
     }
 
-
-
-
-
-
     public function findOne($value)
     {
         return $this->createQueryBuilder('s')
@@ -76,4 +71,14 @@ class SortieRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByNomAndSite($nom, $siteId)
+{
+    return $this->createQueryBuilder('s')
+        ->andWhere('s.site = :siteId')
+        ->andWhere('s.nom LIKE :nom')
+        ->setParameter('siteId', $siteId)
+        ->setParameter('nom', '%' . $nom . '%')
+        ->getQuery()
+        ->getResult();
+}
 }

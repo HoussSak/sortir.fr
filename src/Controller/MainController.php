@@ -23,30 +23,36 @@ class MainController extends AbstractController
         if (!$user instanceof User) {
             return $this->redirectToRoute('app_login');
         }
-
+    
         $sites = $siteRepository->findAll();
         $userSite = $user->getSite();
-
+    
         $filtreForm = $this->createForm(FiltreSortieType::class);
         $filtreForm->handleRequest($request);
-
+    
         $choixSite = $request->request->get('site');
+        $filtreSortie = $request->request->get('filtre_sortie');
+        $rechercheNom = null;
 
-        // By default, display Sorties from the user's site
-        if ($user->getRoles())
-        if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+        if (is_array($filtreSortie) && isset($filtreSortie['rechercheNom'])) {
+            $rechercheNom = $filtreSortie['rechercheNom'];
+        }
+
+            
+        if ($filtreForm->isSubmitted() && $choixSite) {
+            $request->getSession()->set('selected_site_id', $choixSite);
+        }
+    
+        $selectedSiteId = $request->getSession()->get('selected_site_id', $userSite->getId());
+    
+        if ($this->isGranted('ROLE_ADMIN')) {
+            // Utilisez findAll() pour les administrateurs
             $sorties = $sortieRepository->findAll();
         } else {
-            $sorties = $sortieRepository->findByExampleField($userSite->getId());
+            // Utilisez findByNomAndSite() avec le filtre par nom
+            $sorties = $sortieRepository->findByNomAndSite($rechercheNom, $selectedSiteId);
         }
-
-        if ($filtreForm->isSubmitted()) {
-            if ($choixSite) {
-                // Set the selected site to the session
-                $request->getSession()->set('selected_site_id', $choixSite);
-            }
-        }
-
+    
         return $this->render('main/index.html.twig', [
             'sites' => $sites,
             'sorties' => $sorties,
@@ -54,4 +60,4 @@ class MainController extends AbstractController
             'userSite' => $userSite,
         ]);
     }
-}
+}    

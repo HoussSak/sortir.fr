@@ -5,7 +5,6 @@
 	| Home
 {% endblock %}
 
-
 {% block body %}
 	{{ parent() }}
 	<div>
@@ -28,17 +27,20 @@
 				<h2 style="mb-3; color: #7B8997;">Filtrer les sorties</h2>
 				<!-- Barre de recherche -->
 				<div class="form-outline mb-2">
-					<input type="search" id="form1" class="form-control" placeholder="Rechercher une sortie par mot clé"/>
+    			<input type="search" id="form1" class="form-control" name="nom" placeholder="Rechercher une sortie par nom" value="{{ app.request.query.get('nom') }}"/>
 				</div>
+
 				<!-- Choisir un statut -->
-				<!-- <div class="mb-2">
-					<select class="form-select form-select-sm" aria-label=".form-select-sm example" name="site">
+				<div class="mb-2">
+					<select class="form-select form-select-sm" aria-label=".form-select-sm example" name="etat">
 						<option selected>Selectionner un statut</option>
-						{% for site in sites %}
-							<option value="{{ site.id }}">{{ site.nom }}</option>
-						{% endfor %}
+						<option value="Ouverte">Ouverte</option>
+						<option value="Créée">Créée</option>
+						<option value="Annulée">Annulée</option>
+						<option value="Passée">Passée</option>
+						<option value="En cours">En cours</option>
 					</select>
-				</div> -->
+				</div>
 				<!-- Choisir un site -->
 				<div class="mb-2">
 					<select class="form-select form-select-sm" aria-label=".form-select-sm example" name="site">
@@ -86,17 +88,17 @@
 		<div class="row justify-content-center mt-2">
 			<!-- Boutons -->
 			<div class="col-md-auto mt-5">
-				<button type="submit" class="btn text-white" style="background-color:#214264; border-radius: 20px;">Rechercher</button>
+				<button type="submit" class="btn text-white"
+				style="background-color:#214264; border-radius: 20px;">Rechercher</button>
 				<span class="mx-5"></span>
-				<button type="reset" class="btn text-white" style="background-color:#214264; border-radius: 20px;">Réinitialiser</button>
+				<button type="reset" class="btn text-white"
+				style="background-color:#214264; border-radius: 20px;">Réinitialiser</button>
 			</div>
 		</div>
 		{{ form_end(filtreForm) }}
 	</div>
 
 	{% set target_site_id = app.session.get('selected_site_id') ? app.session.get('selected_site_id') : app.user.site.id %}
-
-
 
 	<!-- Tableau des sorties -->
 	<div class="mt-4 container">
@@ -141,8 +143,6 @@
 						{% if inscrit %}
 							X
 						{% endif %}
-
-
 					</td>
 					<td>
 						<a href="{{ path('app_user_afficher',{id:sortie.auteur.id}) }}" class="text-decoration-none">
@@ -151,8 +151,6 @@
 					</td>
 
 					<td>
-
-
 						{% if sortie.auteur == app.user or 'ROLE_ADMIN' in app.user.roles %}
 							{% if sortie.etat == 'Créée' and 'ROLE_USER' in app.user.roles  %}
 								<a href="{{ path('app_sortie_modifier',{id:sortie.id}) }}">
@@ -175,11 +173,8 @@
 								<button class="btn btn-primary">Afficher</button>
 							</a>
 
-
 							{% if inscrit  %}
-
 								{%  if  'now'| date('d/m/y H:i')  <  sortie.dateDebut | date('d/m/Y H:i') or not 'now'| date('d/m/y')  >  sortie.dateCloture | date('d/m/Y') %}
-
 									<a href="{{ path('app_sortie_desister',{id:sortie.id}) }}">
 										<button class="btn btn-danger">Se désister</button>
 									</a>
