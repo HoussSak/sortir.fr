@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         rows.forEach(row => {
             const statusCell = row.children[5];
-            console.log(statusCell);// Changer l'index en fonction de la position de la colonne "Etat"
+            console.log(statusCell);
             if (selectedOption === "Selectionner un statut") {
                 row.style.display = '';
             } else if (statusCell.textContent.trim() === selectedOption) {
@@ -24,8 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener('DOMContentLoaded', function () {
     const userSite = document.getElementById('userSite').textContent;
     const rows = document.querySelectorAll('tbody tr');
-    console.log(userSite);
-
 
     rows.forEach(row => {
         const siteCell = row.children[8].textContent.trim();
@@ -65,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const rows = document.querySelectorAll('tbody tr');
 
             rows.forEach(row => {
-                const sortieNameCell = row.children[1]; // Changer l'index en fonction de la position de la colonne "Nom de la sortie"
+                const sortieNameCell = row.children[1];
                 const sortieName = sortieNameCell.textContent.toLowerCase();
 
                 if (sortieName.startsWith(searchText)) {
@@ -77,45 +75,37 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-
-// filter par date de début
+// filter les sorties par date
 document.addEventListener('DOMContentLoaded', function () {
     const dateDebutInput = document.querySelector('#dateDebut');
-    if (dateDebutInput) {
-        dateDebutInput.addEventListener('change', function () {
-            const selectedDate = new Date(dateDebutInput.value);
-            const rows = document.querySelectorAll('tbody tr');
-
-            rows.forEach(row => {
-                const dateDebutCell = row.children[2]; // Changer l'index en fonction de la position de la colonne "Date de début"
-                const formattedSelectedDate = `${selectedDate.getDate().toString().padStart(2, '0')}/${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}/${selectedDate.getFullYear()}`;
-                if (formattedSelectedDate === dateDebutCell.textContent) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    }
-});
-
-// filter par date de fin
-document.addEventListener('DOMContentLoaded', function () {
     const dateFinInput = document.querySelector('#dateFin');
-    if (dateFinInput) {
-        dateFinInput.addEventListener('change', function () {
-            const selectedDate = new Date(dateFinInput.value);
-            const rows = document.querySelectorAll('tbody tr');
 
-            rows.forEach(row => {
-                const dateFinCell = row.children[3]; // Changer l'index en fonction de la position de la colonne "Date de début"
-                const formattedSelectedDate = `${selectedDate.getDate().toString().padStart(2, '0')}/${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}/${selectedDate.getFullYear()}`;
-                if (formattedSelectedDate === dateFinCell.textContent) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+    if (dateDebutInput) {
+        dateDebutInput.addEventListener('change', filterByDate);
+    }
+
+    if (dateFinInput) {
+        dateFinInput.addEventListener('change', filterByDate);
+    }
+
+    function filterByDate() {
+        const debutDate = new Date(dateDebutInput.value);
+        const finDate = new Date(dateFinInput.value);
+
+        const rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+            const dateDebutCell = row.children[2].textContent;
+            const formattedSelectedDateDebut = `${debutDate.getDate().toString().padStart(2, '0')}/${(debutDate.getMonth() + 1).toString().padStart(2, '0')}/${debutDate.getFullYear()}`;
+            const dateFinCell = row.children[2].textContent;
+            const formattedSelectedDateFin = `${finDate.getDate().toString().padStart(2, '0')}/${(finDate.getMonth() + 1).toString().padStart(2, '0')}/${finDate.getFullYear()}`;
+            console.log(dateDebutCell)
+            console.log(formattedSelectedDateDebut)
+            if (dateDebutCell >= formattedSelectedDateDebut && dateFinCell <= formattedSelectedDateFin) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
         });
     }
 });
@@ -124,8 +114,6 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     const organisateurCheckbox = document.querySelector('input[name="organisateur"]');
     const userDisplayName = document.getElementById('userDisplayName').textContent;
-    console.log(userDisplayName);
-
     const filterByOrganisateur = () => {
         const isOrganisateurChecked = organisateurCheckbox.checked;
         const rows = document.querySelectorAll('tbody tr');
@@ -200,6 +188,21 @@ document.addEventListener('DOMContentLoaded', function () {
         nonInscritCheckbox.addEventListener('change', filterByNonInscrit);
     }
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const dateInput = document.querySelector('#dateD').textContent;
+    console.log(dateInput)
+    const today = new Date().toISOString().split('T')[0];
+
+    dateInput.setAttribute('min', today);
+
+    dateInput.addEventListener('change', function () {
+        if (dateInput.value < today) {
+            dateInput.value = today;
+        }
+    });
+});
+
 
 
 

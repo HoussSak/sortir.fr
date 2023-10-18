@@ -139,4 +139,14 @@ class Lieu
 
         return $this;
     }
+
+    public function __toString()
+    {
+        if ($this->ville) {
+            return sprintf('%s, %s, %s, %s, %s, %s', $this->nom, $this->rue, $this->latitude, $this->longitude, $this->ville->getNom(), $this->ville->getCodePostal());
+        } else {
+            return sprintf('%s, %s, %s, %s', $this->nom, $this->rue, $this->latitude, $this->longitude);
+        }
+    }
+
 }

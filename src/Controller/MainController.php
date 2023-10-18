@@ -10,10 +10,12 @@ use App\Entity\User;
 
 use App\Form\FiltreSortieType;
 
+use App\Repository\HistoStoriesRepository;
 use App\Repository\SiteRepository;
 
 use App\Repository\SortieRepository;
 
+use App\service\MainService;
 use App\utils\EtatEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,19 +31,26 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 
 {
+    private $mainService;
+
+    public function __construct(MainService $mainService)
+    {
+        $this->mainService = $mainService;
+    }
 
     #[Route('/home', name: 'app_home')]
-
     public function home(
 
         SiteRepository $siteRepository,
 
         SortieRepository $sortieRepository,
+        HistoStoriesRepository $histoStoriesRepository,
 
         Request $request,
         EntityManagerInterface $entityManager
 
     ): Response {
+
 
         $sortiesList = $sortieRepository->findAll();
         $today = new \DateTime();
@@ -66,9 +75,7 @@ class MainController extends AbstractController
         }
        if ($sortie->getDateDebut() !== null &&
                 $sortie->getDateDebut()->diff($today)->m >= 1) {
-                $sortie->setEtat(EtatEnum::ARCHIVEE);
-                $entityManager->persist($sortie);
-                $entityManager->flush();
+               $this->mainService->updateSortieEtat($sortie,$today);
        }
 
         }

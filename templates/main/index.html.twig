@@ -153,7 +153,7 @@
 						{% endif %}
 					</td>
 					<td>
-						<a href="{{ path('app_user_afficher',{id:sortie.auteur.id}) }}" class="text-decoration-none">
+						<a href="{{ path('app_user_afficher',{id:sortie.auteur.id}) }}" class="text-decoration-none" style="color: #011F39; font-weight: bold">
 							{{ sortie.auteur.prenom |capitalize }} {{ sortie.auteur.nom [:1] }}</a>
 					</td>
 					<td>{{ sortie.auteur.site.nom }}</td>
