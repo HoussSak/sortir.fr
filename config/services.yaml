@@ -22,3 +22,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\service\MainService: # Assurez-vous que le chemin est correct
+        autowire: true # Si votre service nécessite l'autowiring
+        autoconfigure: true # Si votre service peut être auto-configuré
