@@ -9,9 +9,6 @@
 				<li class="nav-item">
 					<a class="nav-link active text-white fs-5" aria-current="page" href="{{ path('app_user_edit') }}">Mon profil</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link active text-white fs-5" aria-current="page" href="{{ path('app_user_edit') }}">Administration</a>
-				</li>
 			</ul>
 		</div>
 
@@ -21,7 +18,7 @@
 
 						<div
 							class="d-flex align-items-center justify-content-center" style="min-height: 50px; margin-right: 20px;">
-							<p class="participant text-white mb-0 fw-bold fs-5">{{app.user.prenom |capitalize}}</p>
+							<p id="userDisplayName" class="participant text-white mb-0 fw-bold fs-5">{{app.user.prenom |capitalize}}</p>
 						</div>
 
 					<li class="nav-item">

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Sortie;
+use App\utils\EtatEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -71,14 +72,13 @@ class SortieRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByNomAndSite($nom, $siteId)
-{
-    return $this->createQueryBuilder('s')
-        ->andWhere('s.site = :siteId')
-        ->andWhere('s.nom LIKE :nom')
-        ->setParameter('siteId', $siteId)
-        ->setParameter('nom', '%' . $nom . '%')
-        ->getQuery()
-        ->getResult();
-}
+    public function findAllWithoutArchivee()
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.etat != :archivedState')
+            ->setParameter('archivedState', EtatEnum::ARCHIVEE)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

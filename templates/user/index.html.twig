@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Register
+    Modifier mon profil
 {% endblock %}
-
 {% block body %}
-<section class="vh-100" style="background-color: #021F39;">
+    {{ parent() }}
+    <section class="vh-100" style="background-color: #021F39;">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col col-xl-10">
@@ -23,6 +23,13 @@
                                     width="200" alt="sortir.com"></a>
                                 </div>
                                 <h4 class="fw-bold mb-2 text-center">Gérer mon profil</h4>
+                                <div>
+                                    {% for message in app.flashes('danger') %}
+                                        <div class="alert alert-danger">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
 
                                 {{ form_start(registrationForm) }}
                                 
