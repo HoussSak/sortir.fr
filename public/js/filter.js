@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
 // filter par site
 document.addEventListener('DOMContentLoaded', function () {
     const userSite = document.getElementById('userSite').textContent;
@@ -76,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
 // filter par date de début
 document.addEventListener('DOMContentLoaded', function () {
     const dateDebutInput = document.querySelector('#dateDebut');
@@ -117,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
 // sorties dont je suis l organisateur
 document.addEventListener('DOMContentLoaded', function () {
     const organisateurCheckbox = document.querySelector('input[name="organisateur"]');
@@ -170,6 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
         inscritCheckbox.addEventListener('change', filterByInscrit);
     }
 });
+
 // sorties auxquelles je participe pas
 document.addEventListener('DOMContentLoaded', function () {
     const nonInscritCheckbox = document.querySelector('input[name="nonInscrit"]');
