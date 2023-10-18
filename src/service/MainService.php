@@ -64,9 +64,10 @@ class MainService
         foreach ($sortie->getUsersInscrits()->getValues() as $user) {
             $usersArray[] = [
                 'pseudo' => $user->getPseudo(),
-                'email' => $user->getEmail(),
                 'nom' => $user->getNom(),
                 'prenom' => $user->getPrenom(),
+                'telephone' => $user->getTelephone(),
+                'email' => $user->getEmail(),
                 'site' => $user->getSite()->getNom(),
             ];
         }

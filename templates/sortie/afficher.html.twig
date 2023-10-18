@@ -20,7 +20,7 @@
 
                                         <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
                                         <a href="{{ path('app_login') }}"><img src="{{ asset('img/Logo.svg') }} "width="200" alt="sortir.com"></a>
-                                        <span class="h2 fw-bold mb-0">{{ sortie.nom }}</span>
+                                        <span hidden class="h2 fw-bold mb-0">{{ sortie.nom }}</span>
                                     </div>
                                     {% if sortie.etat =='Annulée' %}
                                     <div>

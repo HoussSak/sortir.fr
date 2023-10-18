@@ -64,16 +64,35 @@ class SortieController extends AbstractController
         ]);
     }
 
-    
+
 
     #[Route("/lieux-villes", name: "api_lieux_villes")]
-    public function fruitsCouleurs(LieuRepository $lieuRepository,VilleRepository $villeRepository): Response
+    public function fruitsCouleurs(LieuRepository $lieuRepository, VilleRepository $villeRepository): Response
     {
-        $tab['lieux'] = $lieuRepository->findAll();
-        $tab['villes'] = $villeRepository->findAll();
+        $villes = $villeRepository->findAll();
+        $response = [];
 
-        // reponse en json
-        return $this->json($tab, 200, [], ['groups' => 'lieu']);
+        foreach ($villes as $ville) {
+            $lieux = [];
+            foreach ($ville->getLieux() as $lieu) {
+                $lieux[] = [
+                    'id' => $lieu->getId(),
+                    'nom' => $lieu->getNom(),
+                ];
+            }
+
+            $response[] = [
+                'ville' => [
+                    'id' => $ville->getId(),
+                    'nom' => $ville->getNom(),
+                    'codePostal' => $ville->getCodePostal(),
+                ],
+                'lieux' => $lieux,
+            ];
+        }
+
+        // Réponse au format JSON
+        return $this->json($response, 200, [], ['groups' => 'lieu']);
     }
 
 

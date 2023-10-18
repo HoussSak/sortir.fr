@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des lieux{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container my-5">
+        <div class="bg-white p-4 rounded shadow-sm">
+            <h3 class="mb-4 border-bottom">Gérer les lieux</h3>
+
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Rue</th>
+                    <th scope="col">Latitude</th>
+                    <th scope="col">Longitude</th>
+                    <th scope="col">Ville</th>
+                    <th scope="col" colspan="2" class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if lieux %}
+                    {% for lieu in lieux %}
+                        <tr>
+                            <th scope="row">{{ lieu.id }}</th>
+                            <td>{{ lieu.nom }}</td>
+                            <td>{{ lieu.rue }}</td>
+                            <td>{{ lieu.latitude }}</td>
+                            <td>{{ lieu.longitude }}</td>
+                            <td>{{ lieu.ville.nom }}</td>
+                            <td class="text-center"><a href="{{ path('app_supprimer_lieu', {id: lieu.id}) }}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer</a></td>
+                            <td class="text-center"><a href="#" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> Modifier</a></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+
+                {{ form_start(lieuForm, {'attr': {'class': 'my-3'}}) }}
+                <tr>
+                    <th scope="row"></th>
+                    <td>{{ form_row(lieuForm.nom) }}</td>
+                    <td>{{ form_row(lieuForm.rue) }}</td>
+                    <td>{{ form_row(lieuForm.latitude) }}</td>
+                    <td>{{ form_row(lieuForm.longitude) }}</td>
+                    <td>{{ form_row(lieuForm.ville) }}</td>
+                    <td colspan="2" class="text-center"><button class="btn btn-secondary btn-sm"><i class="bi bi-plus"></i> Ajouter</button></td>
+                </tr>
+                {{ form_end(lieuForm) }}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

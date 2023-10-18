@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\Form\FiltreSortieType;
 
 use App\Repository\HistoStoriesRepository;
+use App\Repository\LieuRepository;
 use App\Repository\SiteRepository;
 
 use App\Repository\SortieRepository;
@@ -44,14 +45,13 @@ class MainController extends AbstractController
         SiteRepository $siteRepository,
 
         SortieRepository $sortieRepository,
-        HistoStoriesRepository $histoStoriesRepository,
-
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        LieuRepository $lieuRepository
 
     ): Response {
 
-
+        //dd($lieuRepository->findAll()[0]->getVille()->getNom());
         $sortiesList = $sortieRepository->findAll();
         $today = new \DateTime();
         foreach ($sortiesList as $sortie) {

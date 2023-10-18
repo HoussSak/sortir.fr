@@ -17,64 +17,86 @@
 
                                         <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
                                         <a href="{{ path('app_login') }}"><img src="{{ asset('img/Logo.svg') }} "width="200" alt="sortir.com"></a>
-                                        <span class="h2 fw-bold mb-0">Créer une sortie</span>
+                                        <span class="h2 fw-bold mb-0">Modifier ma sortie</span>
                                     </div>
-                                    {{ form_start(sortieForm) }}
-                                    {{ form_row(sortieForm.nom,{
-                                        attr:{
-                                            class:'form-control '
-                                        },row_attr:{
-                                            class:'form-group'
-                                        }
-                                    }) }}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_start(sortieForm) }}
 
-                                    {{ form_row(sortieForm.dateDebut,{
-                                        attr:{
-                                            class:'form-control '
-                                        },row_attr:{
-                                            class:'form-group'
-                                        }
-                                    }) }}
+                                            {{ form_row(sortieForm.nom,{
+                                                attr:{
+                                                    class:'form-control'
+                                                },row_attr:{
+                                                    class:'form-group '
+                                                }
+                                            }) }}
+                                        </div>
+                                        <div class="col-md-6">
 
-                                    {{ form_row(sortieForm.dateCloture,{
-                                        attr:{
-                                            class:'form-control '
-                                        },row_attr:{
-                                            class:'form-group'
-                                        }
-                                    }) }}
+                                            {{ form_row(sortieForm.dateDebut,{
+                                                attr:{
+                                                    class:'form-control '
+                                                },row_attr:{
+                                                    class:'form-group'
+                                                }
+                                            }) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(sortieForm.dateCloture,{
+                                                attr:{
+                                                    class:'form-control'
+                                                },row_attr:{
+                                                    class:'form-group'
 
-                                    {{ form_row(sortieForm.nbInscriptionsMax,{
-                                        attr:{
-                                            class:'form-control '
-                                        },row_attr:{
-                                            class:'form-group'
-                                        }
-                                    }) }}
+                                                }
+                                            }) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(sortieForm.nbInscriptionsMax,{
+                                                attr:{
+                                                    class:'form-control ',
+                                                    min:1
+                                                },row_attr:{
+                                                    class:'form-group'
+                                                }
+                                            }) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(sortieForm.duree,{
+                                                attr:{
+                                                    class:'form-control ',
+                                                    min:1
+                                                },row_attr:{
+                                                    class:'form-group'
+                                                }
+                                            }) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(sortieForm.descriptioninfos,{
+                                                attr:{
+                                                    class:'form-control '
+                                                },row_attr:{
+                                                    class:'form-group'
+                                                }
+                                            }) }}
+                                        </div>
+                                        <div>Ville organisatrice:
+                                            <b>{{ app.user.site.nom }}</b>
+                                        </div>
 
+                                        <div class="form-group">
+                                            <label for="sortie_ville">Ville</label>
+                                            {{ form_widget(sortieForm.lieu, {'id': 'sortie_ville', 'attr': {'class': 'form-control'}}) }}
+                                        </div>
 
-                                    {{ form_row(sortieForm.duree,{
-                                        attr:{
-                                            class:'form-control '
-                                        },row_attr:{
-                                            class:'form-group'
-                                        }
-                                    }) }}
-
-
-                                    {{ form_row(sortieForm.descriptioninfos,{
-                                        attr:{
-                                            class:'form-control '
-                                        },row_attr:{
-                                            class:'form-group'
-                                        }
-                                    }) }}
-                                    <div>Ville organisatrice: <b>{{ app.user.site.nom }}</b></div>
-
-                                   {# {{ form_row(sortieForm.ville)}} #}
-
-                                    {{ form_row(sortieForm.lieu)}}
-                                    {{ form_row(sortieForm.urlPhoto)}}
+                                        <div class="form-group">
+                                            <label for="sortie_lieu">Lieu</label>
+                                            <select name="sortie[lieu]" id="sortie_lieu" class="form-control"></select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(sortieForm.urlPhoto)}}
+                                        </div>
+                                    </div>
                                     <button type="submit" class="btn btn-primary">Enregistrer</button>
                                     <button type="submit" class="btn btn-dark" name="modifier" value="publier">Publier</button>
                                     <button type="submit" class="btn btn-danger" name="modifier" value="supprimer">Supprimer</button>
@@ -92,6 +114,62 @@
             </div>
         </div>
     </section>
+
+    <script>
+        let objets;
+        let url = '{{ path('api_lieux_villes') }}';
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                objets = data;
+                afficherVilles(data);
+            });
+
+        function afficherVilles(data) {
+            let selectVille = document.getElementById('sortie_ville');
+            selectVille.innerHTML = "";
+            for (let ville of data) {
+                let optionVille = document.createElement('option');
+                optionVille.value = ville.ville.id;
+                optionVille.textContent = ville.ville.nom;
+                selectVille.appendChild(optionVille);
+            }
+            if (data.length > 0) {
+                let defaultVilleId = {{ sortieForm.lieu.vars.value }};
+                selectVille.value = defaultVilleId;
+                afficherLieux(defaultVilleId);
+            }
+        }
+
+        function afficherLieux(villeId) {
+            let selectLieu = document.getElementById('sortie_lieu');
+            selectLieu.innerHTML = "";
+            for (let obj of objets) {
+                console.log(obj);
+                if (obj.ville.id === villeId) {
+                    let defaultLieuId = {{ sortieForm.lieu.vars.data.id}};
+                    for (let lieu of obj.lieux) {
+                        console.log(lieu.id)
+                        let optionLieu = document.createElement('option');
+                        optionLieu.value = lieu.id;
+
+                        optionLieu.textContent = lieu.nom;
+                        if (lieu.id.toString() === defaultLieuId) {
+                            optionLieu.selected = true;
+                        }
+                        selectLieu.appendChild(optionLieu);
+                    }
+                }
+            }
+        }
+
+        document.getElementById('sortie_ville').onchange = function () {
+            let id = parseInt(document.getElementById('sortie_ville').value);
+            afficherLieux(id);
+        }
+    </script>
+
 
 {% endblock %}
 {% block footer %} {{ parent () }}{% endblock %}

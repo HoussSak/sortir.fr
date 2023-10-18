@@ -38,7 +38,10 @@ class SortieType extends AbstractType
                 'widget'=>'single_text'
             ])
             ->add('descriptioninfos')
-            ->add('lieu',null,["choice_label"=>"nom"])
+            ->add('lieu', null, [
+                'label' => 'Ville',
+                'choice_label' => 'ville.nom'
+            ])
             ->add('nbInscriptionsMax')
             ->add('urlPhoto')
         ;
