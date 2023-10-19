@@ -15,7 +15,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'le mail est deja utilisé, Veuillez saisir un nouveau')]
 #[ORM\Table(name: "users")]
 #[ORM\HasLifecycleCallbacks]
 
@@ -106,7 +106,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     #[Assert\Regex(
         pattern: '/^0[1-79]/',
-        message: 'Le numéro de téléphone doit commencer par un chiffre entre 01 et 09',
+        message: 'Le numéro de téléphone doit commencer par un chiffre entre 01 et 09 hormis 08',
     )]
     private $telephone;
 

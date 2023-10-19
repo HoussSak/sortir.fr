@@ -1,0 +1,5 @@
+email,roles,password,nom,prenom,administrateur,actif,photo,pseudo,telephone
+admin@admin.com,ROLE_ADMIN,$2y$13$y9cn.OWqG6xXa0tHg3ijS.zs7LmrkZBYsTB21tssxwQVUjqXex2na,Admin,Admin,Oui,Oui,,admin,0601055467
+user@user.com,ROLE_USER,$2y$13$MSH.FccKXI7NtqX6Riayg./6QCP59xxCMBU/HDKZTe0KnnIl9QyvC,User,User,Non,Oui,pexels-tyler-lastovich-772803-65300da5bfcaa812088184.jpg,user,0601055467
+houss@houss.fr,ROLE_USER,$2y$13$FFPZZbeh2Jh48w/GYnB1feS5/9ITgcvLoPToV/FQZg4au3vVM5Sky,Vich,Vich,Non,Oui,frieza-65300ad74a59e392703171.png,Vich,0988746564
+photo@photo.fr,ROLE_USER,$2y$13$CS5QdpWISgu532g83XUeaOGL2gBujgn9P4zgyDqUQuDyi1J2bxh6u,photo,photo,Non,Oui,pexels-pixabay-414199-6530d66bbcc2c775107911.jpg,Photo,0672746357
