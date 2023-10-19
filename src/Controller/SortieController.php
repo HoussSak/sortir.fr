@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SortieController extends AbstractController
 {
 
-    #[Route("/creer/sortie", name: "app_sortie_creer")]
+    #[Route("/sortie/creer", name: "app_sortie_creer")]
     public function creerSortie(Request $request,
                                 EntityManagerInterface $entityManager,
                                 SortieRepository $sortieRepository,
@@ -67,7 +67,7 @@ class SortieController extends AbstractController
 
 
     #[Route("/lieux-villes", name: "api_lieux_villes")]
-    public function fruitsCouleurs(LieuRepository $lieuRepository, VilleRepository $villeRepository): Response
+    public function getAllVilleApi(VilleRepository $villeRepository): Response
     {
         $villes = $villeRepository->findAll();
         $response = [];
@@ -105,14 +105,12 @@ class SortieController extends AbstractController
 
 
 
-    #[Route("/modifier/sortie/{id<[0-9]+>}", name: "app_sortie_modifier")]
+    #[Route("/sortie/modifier/{id<[0-9]+>}", name: "app_sortie_modifier")]
     public function modifierSortie(Request $request,EntityManagerInterface $entityManager,
                                    SortieRepository $sortieRepository,
                                    $id): Response
     {
         $user=$this->getUser();
-        $site=$user->getSite();
-
         $sortie =$sortieRepository->find($id);
 
         $sortieForm = $this->createForm(SortieType::class, $sortie);

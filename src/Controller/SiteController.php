@@ -40,7 +40,7 @@ class SiteController extends AbstractController
         ]);
     }
 
-    #[Route('/supprimerSite/{id<[0-9]+>}', name: 'app_supprimer_site')]
+    #[Route('/admin/supprimerSite/{id<[0-9]+>}', name: 'app_supprimer_site')]
     public function supprimer(SiteRepository $repo,Site $site): Response
     {
         $repo->remove($site);

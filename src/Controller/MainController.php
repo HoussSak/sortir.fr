@@ -50,8 +50,6 @@ class MainController extends AbstractController
         LieuRepository $lieuRepository
 
     ): Response {
-
-        //dd($lieuRepository->findAll()[0]->getVille()->getNom());
         $sortiesList = $sortieRepository->findAll();
         $today = new \DateTime();
         foreach ($sortiesList as $sortie) {

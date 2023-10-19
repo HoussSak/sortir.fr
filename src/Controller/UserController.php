@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\ModifierProfilFormType;
 use App\Form\RegistrationFormType;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,18 +27,18 @@ class UserController extends AbstractController
         if ($form->isSubmitted()) {
             $plainPassword = $form->get('plainPassword')->getData();
 
-            if ($userPasswordHasher->isPasswordValid($user, $plainPassword)) {
-
-                $entityManager->persist($user);
-                $entityManager->flush();
-                // do anything else you need here, like send an email
-                $this->addFlash('success', 'Votre compte à été modifié  avec succes!');
-                return $this->redirectToRoute('app_home');
-
-            } else {
-                $this->addFlash('danger', 'Veuillez saisir votre mot de passe actuel');
-                return $this->redirectToRoute('app_user_edit');
-
+            try {
+                if ($userPasswordHasher->isPasswordValid($user, $plainPassword)) {
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Votre compte a été modifié avec succès!');
+                    return $this->redirectToRoute('app_home');
+                } else {
+                    $this->addFlash('danger', 'Veuillez saisir votre mot de passe actuel');
+                    return $this->redirectToRoute('app_user_edit');
+                }
+            } catch (UniqueConstraintViolationException $e) {
+                $this->addFlash('danger', 'Le pseudo existe déjà, veuillez en choisir un autre.');
             }
 
         }
