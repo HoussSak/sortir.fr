@@ -2,18 +2,24 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\Timestampable;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[ORM\Table(name: "users")]
 #[ORM\HasLifecycleCallbacks]
+
+#[Vich\Uploadable]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
@@ -25,6 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $role = ($this->getAdministrateur()) ? 'ROLE_ADMIN' : 'ROLE_USER';
         $this->setRoles([$role]);
     }
+    use Timestampable;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -74,6 +81,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $actif;
+
+    #[Vich\UploadableField(mapping: "user_image", fileNameProperty:"photo")]
+    private $imageFile;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $photo;
@@ -325,5 +335,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->inscriptions->removeElement($inscription);
 
         return $this;
+    }
+
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->setUpdatedAt(new \DateTimeImmutable);
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
     }
 }
