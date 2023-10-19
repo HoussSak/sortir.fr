@@ -106,7 +106,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     #[Assert\Regex(
         pattern: '/^0[1-79]/',
-        message: 'Le numéro de téléphone doit commencer par un chiffre entre 01 et 09',
+        message: 'Le numéro de téléphone doit commencer par un chiffre entre 01 et 09 hormis 08',
     )]
     private $telephone;
 

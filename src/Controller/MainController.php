@@ -9,22 +9,14 @@ namespace App\Controller;
 use App\Entity\User;
 
 use App\Form\FiltreSortieType;
-
-use App\Repository\HistoStoriesRepository;
-use App\Repository\LieuRepository;
 use App\Repository\SiteRepository;
-
 use App\Repository\SortieRepository;
-
 use App\service\MainService;
 use App\utils\EtatEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
 use Symfony\Component\HttpFoundation\Request;
-
 use Symfony\Component\HttpFoundation\Response;
-
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -41,14 +33,10 @@ class MainController extends AbstractController
 
     #[Route('/home', name: 'app_home')]
     public function home(
-
         SiteRepository $siteRepository,
-
         SortieRepository $sortieRepository,
         Request $request,
-        EntityManagerInterface $entityManager,
-        LieuRepository $lieuRepository
-
+        EntityManagerInterface $entityManager
     ): Response {
         $sortiesList = $sortieRepository->findAll();
         $today = new \DateTime();

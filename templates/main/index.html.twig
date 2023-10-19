@@ -134,7 +134,7 @@
 				<tr class="{{ loop.index is odd ? 'bg-light-gray' : 'bg-light-green' }}">
 					<th scope="row">{{ loop.index }}</th>
 					<td>{{ sortie.nom }}</td>
-					<td>{{ sortie.dateDebut | date('d/m/Y')}}</td>
+					<td>{{ sortie.dateDebut | date('d/m/Y')}} à </td>
 					<td>{{ sortie.dateCloture | date('d/m/Y')}}</td>
 					<td>{{ sortie.usersInscrits|length }}/{{ sortie.nbInscriptionsMax }}</td>
 					<td>{{ sortie.etat }}</td>

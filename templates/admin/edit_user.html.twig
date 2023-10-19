@@ -13,7 +13,11 @@
                     <div class="card" style="border-radius: 1rem;">
                         <div class="row g-0">
                             <div class="col-md-6 col-lg-5 d-none d-md-block">
-                                <img src="{{ asset('img/img1.webp') }}" alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;"/>
+                                {% if user.photo %}
+                                    <img src="{{ asset('uploads/user/' ~ user.photo) }}" alt="{{ user.pseudo }}" class="img-fluid" style="border-radius: 1rem 0 0 1rem;">
+                                {% else %}
+                                    <img src="{{ asset('img/default_image.png') }}" alt="Fallback" class="img-fluid" style="border-radius: 1rem 0 0 1rem;">
+                                {% endif %}
                             </div>
 
                             <div class="col-md-6 col-lg-7 d-flex align-items-center">

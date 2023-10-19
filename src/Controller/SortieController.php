@@ -103,8 +103,6 @@ class SortieController extends AbstractController
         return $this->render('sortie/afficher.html.twig', compact('sortie'));
     }
 
-
-
     #[Route("/sortie/modifier/{id<[0-9]+>}", name: "app_sortie_modifier")]
     public function modifierSortie(Request $request,EntityManagerInterface $entityManager,
                                    SortieRepository $sortieRepository,
