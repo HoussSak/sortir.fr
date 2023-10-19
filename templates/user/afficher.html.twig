@@ -8,8 +8,11 @@
                 <div class="card" style="border-radius: 1rem;">
                     <div class="row g-0">
                         <div class="col-md-6 col-lg-5 d-none d-md-block">
-                            <img src="{{ asset('img/img1.webp') }}"
-                                 alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+                            {% if user.photo %}
+                                <img src="{{ asset('uploads/user/' ~ user.photo) }}" alt="{{ user.pseudo }}" class="w-100" style="max-width: 300px; max-height: 300px;">
+                            {% else %}
+                                <img src="{{ asset('img/default_image.png') }}" alt="Fallback" class="w-100" style="max-width: 300px; max-height: 300px;">
+                            {% endif %}
                         </div>
                         <div class="col-md-6 col-lg-7 d-flex align-items-center">
                             <div class="card-body p-4 p-lg-5 text-black">

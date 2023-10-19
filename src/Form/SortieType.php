@@ -8,8 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\Constraints\LessThan;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class SortieType extends AbstractType
 {
@@ -43,7 +43,14 @@ class SortieType extends AbstractType
                 'choice_label' => 'ville.nom'
             ])
             ->add('nbInscriptionsMax')
-            ->add('urlPhoto')
+            ->add('imageFile', VichImageType::class, [
+                'label' => 'Image',
+                'help' => 'Formats autorisés (JPEG, JPG, PNG) | Poids max. (5 Mo)',
+                'required' => false,
+                'allow_delete' => false,
+                'download_uri' => false,
+                'asset_helper' => true]
+            )
         ;
     }
 

@@ -2,14 +2,24 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\Timestampable;
 use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SortieRepository::class)]
+#[ORM\Table(name: "sorties")]
+#[ORM\HasLifecycleCallbacks]
+
+
+ #[Vich\Uploadable]
 class Sortie
 {
+    use Timestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
@@ -33,8 +43,12 @@ class Sortie
     #[ORM\Column(type: "integer")]
     private $nbInscriptionsMax;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private $urlPhoto;
+
+    #[Vich\UploadableField(mapping: "sortie_image", fileNameProperty:"imageName")]
+    private $imageFile;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $imageName;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "sortiesOrganisees")]
     #[ORM\JoinColumn(nullable: false)]
@@ -139,17 +153,6 @@ class Sortie
         return $this;
     }
 
-    public function getUrlPhoto(): ?string
-    {
-        return $this->urlPhoto;
-    }
-
-    public function setUrlPhoto(?string $urlPhoto): self
-    {
-        $this->urlPhoto = $urlPhoto;
-
-        return $this;
-    }
 
     public function getAuteur(): ?User
     {
@@ -232,6 +235,36 @@ class Sortie
     public function setEtat(string $etat): static
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->setUpdatedAt(new \DateTimeImmutable);
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): self
+    {
+        $this->imageName = $imageName;
 
         return $this;
     }

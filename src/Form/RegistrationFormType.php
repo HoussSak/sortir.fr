@@ -13,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class RegistrationFormType extends AbstractType
 {
@@ -48,7 +49,14 @@ class RegistrationFormType extends AbstractType
                 'class'=>Site::class,
                 'choice_label'=>'nom'
             ])
-        ;
+            ->add('imageFile', VichImageType::class, [
+                'label' => 'Image',
+                'help' => 'Formats autorisés (JPEG, JPG, PNG) | Poids max. (5 Mo)',
+                'required' => false,
+                'allow_delete' => false,
+                'download_uri' => false,
+                'asset_helper' => true]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
