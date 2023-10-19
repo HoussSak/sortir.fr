@@ -33,9 +33,12 @@ class SortieType extends AbstractType
 
             ])
             ->add('duree')
-            ->add('dateCloture',DateType::class,[
-                'html5'=>true,
-                'widget'=>'single_text'
+            ->add('dateCloture', DateType::class, [
+                'html5' => true,
+                'widget' => 'single_text',
+                'constraints' => [
+                    new Callback([$this, 'validateDateCloture']),
+                ],
             ])
             ->add('descriptioninfos')
             ->add('lieu', null, [
@@ -59,5 +62,23 @@ class SortieType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Sortie::class,
         ]);
+    }
+
+    public function validateDateCloture($dateCloture, ExecutionContextInterface $context)
+    {
+        $dateDebut = $context->getRoot()->getData()->getDateDebut();
+        $today = new \DateTime('today');
+
+        if ($dateCloture < $today) {
+            $context->buildViolation('La date de clôture ne peut pas être dans le passé.')
+                ->atPath('dateCloture')
+                ->addViolation();
+        }
+
+        if ($dateCloture >= $dateDebut) {
+            $context->buildViolation('La date de clôture doit être antérieure à la date de début.')
+                ->atPath('dateCloture')
+                ->addViolation();
+        }
     }
 }

@@ -47,7 +47,7 @@
                                             label: 'Prénom',
                                             attr: {
                                                 class: 'form-control',
-                                                readOnly: 'ROLE_ADMIN' in app.user.roles ? false : true
+                                                disabled: app.user.roles is defined and 'ROLE_ADMIN' in app.user.roles ? false : true
 
                                             }
                                         }) }}
@@ -60,7 +60,7 @@
                                                 label: 'Nom',
                                                 attr: {
                                                     class: 'form-control',
-                                                readOnly: 'ROLE_ADMIN' in app.user.roles ? false : true
+                                                disabled: app.user.roles is defined and 'ROLE_ADMIN' in app.user.roles ? false : true
                                                 }
                                             }) }}
                                     </div>
@@ -98,7 +98,7 @@
                                         label: 'Site',
                                         attr: {
                                             class: 'form-control',
-                                            readOnly: 'ROLE_ADMIN' in app.user.roles ? false : true
+                                            disabled: app.user.roles is defined and 'ROLE_ADMIN' in app.user.roles ? false : true
                                         }
                                     }) }}
                                 </div>

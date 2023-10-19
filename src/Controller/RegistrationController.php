@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Csv\Reader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +49,45 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
+
+
+    #[Route('/admin/create_users_from_csv', name: 'create_users_from_csv')]
+    public function createUsersFromCSV(UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    {
+        $csvFilePath = '/../../public/csvs/users.csv';
+        $csv = Reader::createFromPath($csvFilePath, 'r');
+        $csv->setHeaderOffset(0);
+
+        $records = $csv->getRecords();
+
+        foreach ($records as $record) {
+            $user = new User();
+            $user->setEmail($record['email']);
+            $user->setRoles([$record['roles']]);
+
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $record['password']
+                )
+            );
+
+            $user->setNom($record['nom']);
+            $user->setPrenom($record['prenom']);
+            $user->setAdministrateur($record['administrateur'] === 'false');
+            $user->setActif($record['actif'] === 'true');
+            $user->setPhoto($record['photo']);
+            $user->setPseudo($record['pseudo']);
+            $user->setTelephone($record['telephone']);
+            $entityManager->persist($user);
+        }
+
+        $entityManager->flush();
+        $this->addFlash('success', "Les utilisateurs ont été créés avec succès depuis le fichier CSV.");
+        return $this->redirectToRoute('app_dashboard');
+    }
+
+
 
 
 }
