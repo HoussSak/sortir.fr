@@ -39,27 +39,29 @@ class MainController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response {
         $sortiesList = $sortieRepository->findAll();
-        $today = new \DateTime();
+        $today = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         foreach ($sortiesList as $sortie) {
-        if ($sortie->getDateDebut() !== null && $sortie->getDateDebut()->format('Y-m-d') === $today->format('Y-m-d')) {
+        if ($sortie->getDateDebut() !== null &&
+            $sortie->getDateDebut()->format('Y-m-d') == $today->format('Y-m-d')) {
         $sortie->setEtat(EtatEnum::EN_COURS);
         $entityManager->persist($sortie);
         $entityManager->flush();
          }
-        elseif($sortie->getDateDebut() !== null && $sortie->getDateDebut()->format('Y-m-d') < $today->format('Y-m-d')) {
+        elseif($sortie->getDateDebut() !== null &&
+            $sortie->getDateDebut()->format('Y-m-d') < $today->format('Y-m-d')) {
             $sortie->setEtat(EtatEnum::PASSEE);
             $entityManager->persist($sortie);
             $entityManager->flush();
         }
         elseif($sortie->getDateCloture() !== null &&
-            $sortie->getDateCloture()->format('Y-m-d') < $today->format('Y-m-d') &&
+            $sortie->getDateCloture()->format('Y-m-d') <= $today->format('Y-m-d') &&
             $sortie->getEtat() == EtatEnum::OUVERTE
         ) {
             $sortie->setEtat(EtatEnum::CLOTUREE);
             $entityManager->persist($sortie);
             $entityManager->flush();
         }
-       if ($sortie->getDateDebut() !== null &&
+        elseif ($sortie->getDateDebut() !== null &&
                 $sortie->getDateDebut()->diff($today)->m >= 1) {
                $this->mainService->updateSortieEtat($sortie,$today);
        }
@@ -76,7 +78,7 @@ class MainController extends AbstractController
         $filtreForm = $this->createForm(FiltreSortieType::class);
         $filtreForm->handleRequest($request);
 
-        $sorties = $sortieRepository->findAllWithoutArchivee();
+        $sorties = $sortieRepository->findAll();
 
         return $this->render('main/index.html.twig', [
             'sites' => $sites,

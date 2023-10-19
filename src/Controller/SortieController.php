@@ -67,7 +67,7 @@ class SortieController extends AbstractController
 
 
     #[Route("/lieux-villes", name: "api_lieux_villes")]
-    public function getAllVilleApi(VilleRepository $villeRepository): Response
+    public function getAllVillesApi(VilleRepository $villeRepository): Response
     {
         $villes = $villeRepository->findAll();
         $response = [];
